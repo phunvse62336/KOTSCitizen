@@ -12,7 +12,9 @@ import RegisterScreen from '../Containers/AuthStack/RegisterScreen/RegisterScree
 import CreateProfileScreen from '../Containers/AuthStack/CreateProfileScreen/CreateProfileScreen';
 
 import HomeScreen from '../Containers/HomeStack/HomeScreen/HomeScreen';
-import NewsScreen from '../Containers/HomeStack/NewsScreen/NewsScreen';
+import NewsScreen from '../Containers/NewsStack/NewsScreen/NewsScreen';
+import NewsDetailScreen from '../Containers/NewsStack/NewsDetailScreen/NewsDetailScreen';
+
 
 import styles from './Styles/NavigationStyles';
 import {Colors} from '../Themes';
@@ -74,6 +76,12 @@ const NewsTabStack = createStackNavigator({
       header: null,
     },
   },
+  NewsDetailScreen: {
+    screen: NewsDetailScreen,
+    navigationOptions: {
+      header: null,
+    },
+  },
 });
 
 const SOSTabStack = createStackNavigator({
@@ -83,15 +91,7 @@ const SOSTabStack = createStackNavigator({
       header: null,
     },
   },
-});
-
-const GroupTabStack = createStackNavigator({
-  NewsScreen: {
-    screen: NewsScreen,
-    navigationOptions: {
-      header: null,
-    },
-  },
+  
 });
 
 const MenuTabStack = createStackNavigator({
@@ -108,7 +108,6 @@ const AppNavigator = createBottomTabNavigator(
     HomeTabStack,
     NewsTabStack,
     SOSTabStack,
-    GroupTabStack,
     MenuTabStack,
   },
   {
@@ -134,8 +133,6 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
     iconName = 'newspaper';
   } else if (routeName === 'SOSTabStack') {
     iconName = 'bell';
-  } else if (routeName === 'GroupTabStack') {
-    iconName = 'users';
   } else if (routeName === 'MenuTabStack') {
     iconName = 'bars';
   }

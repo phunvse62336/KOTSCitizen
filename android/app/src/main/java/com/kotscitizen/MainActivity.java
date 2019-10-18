@@ -1,4 +1,4 @@
-package com.kots;
+package com.kotscitizen;
 
 import com.facebook.react.ReactActivity;
 

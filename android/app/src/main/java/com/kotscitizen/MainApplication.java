@@ -1,4 +1,4 @@
-package com.kots;
+package com.kotscitizen;
 
 import android.app.Application;
 import android.util.Log;
