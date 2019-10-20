@@ -79,7 +79,9 @@ const NewsTabStack = createStackNavigator({
   NewsDetailScreen: {
     screen: NewsDetailScreen,
     navigationOptions: {
-      header: null,
+      headerTitle: 'Tin Tức',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
     },
   },
 });
