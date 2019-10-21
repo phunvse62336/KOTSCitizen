@@ -132,6 +132,7 @@ export class HomeScreen extends Component {
         5000,
       ); // hide toast after 5s
     } else {
+      this.props.navigation.navigate('CreateSOSScreen');
     }
   };
 

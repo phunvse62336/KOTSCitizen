@@ -12,6 +12,7 @@ import RegisterScreen from '../Containers/AuthStack/RegisterScreen/RegisterScree
 import CreateProfileScreen from '../Containers/AuthStack/CreateProfileScreen/CreateProfileScreen';
 
 import HomeScreen from '../Containers/HomeStack/HomeScreen/HomeScreen';
+import CreateSOSScreen from '../Containers/HomeStack/CreateSOSScreen/CreateSOSScreen';
 import NewsScreen from '../Containers/NewsStack/NewsScreen/NewsScreen';
 import NewsDetailScreen from '../Containers/NewsStack/NewsDetailScreen/NewsDetailScreen';
 
@@ -67,6 +68,14 @@ const HomeTabStack = createStackNavigator({
       header: null,
     },
   },
+  CreateSOSScreen: {
+    screen: CreateSOSScreen,
+    navigationOptions: {
+      headerTitle: 'Quay lại',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
+    },
+  },
 });
 
 const NewsTabStack = createStackNavigator({
@@ -79,7 +88,7 @@ const NewsTabStack = createStackNavigator({
   NewsDetailScreen: {
     screen: NewsDetailScreen,
     navigationOptions: {
-      headerTitle: 'Tin Tức',
+      headerTitle: 'Quay lại',
       headerTintColor: Colors.appColor,
       headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
     },

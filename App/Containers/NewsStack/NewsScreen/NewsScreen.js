@@ -112,16 +112,12 @@ export default class NewsScreen extends Component {
     };
   }
 
-  // newsDetail = () => {
-  //   this.props.navigation.navigate('NewsDetailScreen');
-  // };
-
   _renderItem = ({item, index}) => <NewsList item={item} index={index} navigation={this.props.navigation} />;
 
   render() {
     return (
       <View style={styles.container}>
-        {/* <HeaderUI title="News" /> */}
+        <HeaderUI title="Tin Tức" />
         <View style={styles.viewImage}>
           <ImageBackground source={{uri: 'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg'}} style={styles.bannerImage}>
                   <View style={styles.textOverImage}>
