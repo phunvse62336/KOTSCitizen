@@ -15,7 +15,8 @@ import HomeScreen from '../Containers/HomeStack/HomeScreen/HomeScreen';
 import CreateSOSScreen from '../Containers/HomeStack/CreateSOSScreen/CreateSOSScreen';
 import NewsScreen from '../Containers/NewsStack/NewsScreen/NewsScreen';
 import NewsDetailScreen from '../Containers/NewsStack/NewsDetailScreen/NewsDetailScreen';
-
+import MenuScreen from '../Containers/MenuStack/MenuScreen/MenuScreen';
+import NotificationScreen from '../Containers/NotificationStack/NotificationScreen/NotificationScreen';
 
 import styles from './Styles/NavigationStyles';
 import {Colors} from '../Themes';
@@ -96,18 +97,17 @@ const NewsTabStack = createStackNavigator({
 });
 
 const SOSTabStack = createStackNavigator({
-  NewsScreen: {
-    screen: NewsScreen,
+  NotificationScreen: {
+    screen: NotificationScreen,
     navigationOptions: {
       header: null,
     },
   },
-  
 });
 
 const MenuTabStack = createStackNavigator({
-  NewsScreen: {
-    screen: NewsScreen,
+  MenuScreen: {
+    screen: MenuScreen,
     navigationOptions: {
       header: null,
     },

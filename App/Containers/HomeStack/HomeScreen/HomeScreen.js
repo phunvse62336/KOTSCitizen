@@ -12,27 +12,36 @@ import {
   Alert,
 } from 'react-native';
 import MapView, {Marker, AnimatedRegion} from 'react-native-maps';
-import PubNubReact from 'pubnub-react';
 import Geolocation from 'react-native-geolocation-service';
 import {FloatingAction} from 'react-native-floating-action';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-root-toast';
+import io from 'socket.io-client/dist/socket.io';
+import AsyncStorage from '@react-native-community/async-storage';
 
+import {APISendSOS} from '../../../Services/APISendSOS';
+import {MESSAGES} from '../../../Utils/Constants';
 import {Images} from '../../../Themes';
-
+import styles from './HomeScreenStyles';
 const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
+const LATITUDE = 10.782546;
+const LONGITUDE = 106.650416;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const socketURL = 'http://localhost:4333';
+console.ignoredYellowBox = ['Setting a timer'];
 
 export class HomeScreen extends Component {
   constructor(props) {
     super(props);
+    this.socket = io(socketURL);
 
     this.state = {
+      phoneNumber: '',
+      markerCoordinates: [],
       loading: false,
       toast: false,
       latitude: LATITUDE,
@@ -46,28 +55,30 @@ export class HomeScreen extends Component {
     };
 
     // Replace "X" with your PubNub Keys
-    this.pubnub = new PubNubReact({
-      publishKey: 'pub-c-f375e940-4c95-4b08-a2af-01feeb1f80c2',
-      subscribeKey: 'sub-c-10a702e4-efe0-11e9-b715-9abbdb5d0da2',
-    });
-    this.pubnub.init(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    let phoneNumber = await AsyncStorage.getItem('PHONENUMBER');
+    const socket = this.socket;
+    if (!socket) {
+      return;
+    }
+    socket.on('disconnect', () => console.log('DISCONNECT2'));
+    this.socket.on('locationUpdated', locationState => {
+      const newMarkerCoordinates = Object.values(locationState).map(item => ({
+        latitude: item.lat,
+        longitude: item.lng,
+      }));
+      this.setState({markerCoordinates: newMarkerCoordinates});
+      console.log(locationState);
+    });
+    // this.socket.on('updatelocation', socket => {
+    //   console.log('CONNECTED');
+    // });
     this.watchLocation();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.latitude !== prevState.latitude) {
-      this.pubnub.publish({
-        message: {
-          latitude: this.state.latitude,
-          longitude: this.state.longitude,
-        },
-        channel: 'location',
-      });
-    }
-  }
+  componentDidUpdate(prevProps, prevState) {}
 
   componentWillUnmount() {
     Geolocation.clearWatch(this.watchID);
@@ -118,12 +129,32 @@ export class HomeScreen extends Component {
     longitudeDelta: LONGITUDE_DELTA,
   });
 
-  sendSOS = name => {
+  sendSOS = async name => {
+    const {longitude, latitude, phoneNumber} = this.state;
     if (name === 'bt_sos') {
       this.setState({spinner: true});
-      setTimeout(() => {
-        this.setState({spinner: false, toast: true});
-      }, 2000);
+      let responseStatus = await APISendSOS(phoneNumber, longitude, latitude);
+      if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+        console.log(JSON.stringify(responseStatus));
+        this.setState({
+          toast: true,
+          spinner: false,
+        });
+        setTimeout(
+          () =>
+            this.setState({
+              toast: false,
+            }),
+          3000,
+        ); // hide toast after 5s
+      } else {
+        this.setState({
+          spinner: false,
+        });
+
+        alert('Không gửi được. Vui lòng thử lại sau');
+      }
+
       setTimeout(
         () =>
           this.setState({
@@ -132,11 +163,29 @@ export class HomeScreen extends Component {
         5000,
       ); // hide toast after 5s
     } else {
-      this.props.navigation.navigate('CreateSOSScreen');
+      this.props.navigation.navigate('CreateSOSScreen', {
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+      });
     }
   };
 
+  renderMarkers = markerCoordinates => {
+    return markerCoordinates.map((coord, index) => (
+      <MapView.Marker
+        key={index}
+        image={Images.logoApp}
+        centerOffset={{x: 25, y: 25}}
+        anchor={{x: 0.5, y: 0.5}}
+        coordinate={coord}
+        title={`Truck ${index}`}
+      />
+    ));
+  };
+
   render() {
+    const {region, markerCoordinates} = this.state;
+
     const actions = [
       {
         text: 'Liên Hệ',
@@ -195,6 +244,7 @@ export class HomeScreen extends Component {
               }}
               coordinate={this.state.coordinate}
             />
+            {this.renderMarkers(markerCoordinates)}
           </MapView>
         </View>
         <FloatingAction
@@ -210,16 +260,5 @@ export class HomeScreen extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-});
 
 export default HomeScreen;

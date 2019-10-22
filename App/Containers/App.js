@@ -89,6 +89,7 @@ export class App extends Component {
   };
 
   render() {
+    console.disableYellowBox = true;
     return <AppNavigation />;
   }
 }

@@ -5,10 +5,10 @@ import {
   StyleSheet,
   Dimensions,
   Picker,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {TextInput} from 'react-native-gesture-handler';
 const {width, height} = Dimensions.get('window');
 import Colors from '../../../Themes/Colors';
 import Button from '../../../Components/Button';
@@ -124,14 +124,17 @@ export default class CreateSOSScreen extends Component {
     this.state = {
       text: '',
       height: 0,
+      latitude: this.props.navigation.state.params.latitude,
+      longitude: this.props.navigation.state.params.longitude,
+      message: '',
     };
   }
 
   sendHelp = () => {
-    alert('help', '');
+    alert(this.state.message);
   };
 
-  onChangeTextMessage = text => this.setState({message: text});
+  // onChangeTextMessage = text => this.setState({message: text});
 
   render() {
     return (
@@ -161,9 +164,7 @@ export default class CreateSOSScreen extends Component {
                 {height: Math.max(35, this.state.height)},
               ]}
               multiline={true}
-              onChangeText={text => {
-                this.onChangeTextMessage;
-              }}
+              onChangeText={text => this.setState({message: text})}
               onContentSizeChange={event => {
                 this.setState({height: event.nativeEvent.contentSize.height});
               }}
