@@ -58,7 +58,11 @@ export class HomeScreen extends Component {
   }
 
   async componentDidMount() {
-    let phoneNumber = await AsyncStorage.getItem('PHONENUMBER');
+    AsyncStorage.getItem('PHONENUMBER').then(phone => {
+      this.setState({
+        phoneNumber: phone,
+      });
+    });
     const socket = this.socket;
     if (!socket) {
       return;

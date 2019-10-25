@@ -10,6 +10,10 @@ export const MESSAGES = {
     FAILED: 3,
     PENDING: 4,
   },
+  ROLE: {
+    CITIZEN: 1,
+    KNIGHT: 2,
+  },
   TYPE_CASE: {
     SOS: 1,
     NORMAL: 2,
@@ -22,4 +26,8 @@ export const BASE_URL = 'https://kots.herokuapp.com/api/';
 
 export const SEND_SOS_API = BASE_URL + 'sendCase';
 
-export const FIND_KNIGHT_API = BASE_URL + 'findKnight';
+export const FIND_USER_API = BASE_URL + 'findUser';
+
+export const CREATE_CITIZEN_PROFILE = BASE_URL + 'createProfile';
+
+export const UPDATE_CITIZEN_PROFILE = BASE_URL + 'updateProfile';

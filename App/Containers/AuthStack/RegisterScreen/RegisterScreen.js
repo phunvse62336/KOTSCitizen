@@ -10,9 +10,15 @@ import {
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import PhoneInput from 'react-native-phone-input';
+import firebase from 'react-native-firebase';
+import Spinner from 'react-native-loading-spinner-overlay';
+import io from 'socket.io-client/dist/socket.io';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import {APIFindUser} from '../../../Services/APIFindUser';
+import {MESSAGES} from '../../../Utils/Constants';
 
 import {Button} from '../../../Components';
-
 import styles from './RegisterScreenStyles';
 import {Images, Colors} from '../../../Themes';
 
@@ -22,18 +28,36 @@ export class RegisterScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      token: '',
       phoneNumber: '',
     };
   }
-  register = () => {
+  register = async () => {
     if (this.state.phoneNumber !== '' && this.phone.isValidNumber() === true) {
-      this.state.phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
-
-      this.props.navigation.navigate('ConfirmScreen', {
-        phoneNumber: this.state.phoneNumber,
-        action: 'register',
-      });
+      const phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
+      let responseStatus = await APIFindUser(phoneNumber);
+      if (responseStatus.result === MESSAGES.CODE.FAILED_CODE) {
+        firebase
+          .auth()
+          .signInWithPhoneNumber(phoneNumber)
+          .then(confirmResult => {
+            this.setState({loading: false});
+            this.props.navigation.navigate('ConfirmScreen', {
+              phoneNumber: this.state.phoneNumber,
+              name: '',
+              action: 'register',
+              confirmResult: confirmResult,
+            });
+          })
+          .catch(error => {
+            this.setState({loading: false});
+            alert(error);
+          });
+      } else {
+        Alert.alert('Số điện đã tồn tại', '');
+      }
     } else {
+      this.setState({loading: false});
       Alert.alert('Số điện thoại không đúng', '');
     }
   };

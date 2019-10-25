@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
+import Moment from 'react-moment';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   viewTime: {
     width: width * 0.9,
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   viewSubDescription: {
     width: width * 0.9,
@@ -81,7 +82,9 @@ export default class NewsDetailScreen extends Component {
           </View>
           <View style={styles.viewTime}>
             <Text style={styles.textSource}>{this.state.item.source}</Text>
-            <Text style={styles.textDate}>{this.state.item.date}</Text>
+            <Moment fromNow element={Text} style={styles.textDate}>
+              {this.state.item.date}
+            </Moment>
           </View>
           <Image
             source={{uri: this.state.item.image}}

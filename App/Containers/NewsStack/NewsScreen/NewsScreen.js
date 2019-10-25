@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: width,
   },
   textOverImageColor: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#ffffff',
   },
   textOverImage: {
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     paddingLeft: 10,
+    paddingRight: 10,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
@@ -84,7 +85,7 @@ const NEWS = [
   {
     id: 1,
     title: 'Công an Hà Nội bổ sung 15 tổ cảnh sát 141',
-    date: '11/11/2019',
+    date: '2019-10-23T12:59-0500',
     source: 'vnexpress.vn',
     image:
       'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg',
@@ -96,7 +97,7 @@ const NEWS = [
   {
     id: 2,
     title: 'Công an Hà Nội bổ sung 15 tổ cảnh sát 141',
-    date: '11/11/2019',
+    date: '2019-10-23',
     source: 'vnexpress.vn',
     image:
       'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg',
@@ -108,7 +109,7 @@ const NEWS = [
   {
     id: 3,
     title: 'Công an Hà Nội bổ sung 15 tổ cảnh sát 141',
-    date: '11/11/2019',
+    date: '2019-10-23',
     source: 'vnexpress.vn',
     image:
       'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg',

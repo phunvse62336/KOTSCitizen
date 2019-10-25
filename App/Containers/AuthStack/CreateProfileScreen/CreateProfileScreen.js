@@ -9,11 +9,18 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Toast from 'react-native-root-toast';
+import io from 'socket.io-client/dist/socket.io';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {HeaderUI, Button} from '../../../Components';
 import styles from './CreateProfileScreenStyles';
 import {Colors} from '../../../Themes';
 import {Date} from 'core-js';
+
+import {APIUpdateCitizenProfile} from '../../../Services/APIUpdateCitizenProfile';
+import {MESSAGES} from '../../../Utils/Constants';
 
 const {height, width} = Dimensions.get('window');
 
@@ -23,10 +30,12 @@ export class CreateProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      phoneNumber: '',
       name: '',
       gender: undefined,
       address: '',
       dayOfBirth: moment(),
+      token: '',
     };
   }
 
@@ -57,9 +66,61 @@ export class CreateProfileScreen extends Component {
     </TouchableOpacity>
   );
 
-  onUpdate = () => {
-    this.props.navigation.navigate('AppNavigator');
+  onUpdate = async () => {
+    const {phoneNumber, name, address, gender} = this.state;
+    this.setState({spinner: true});
+    let responseStatus = await APIUpdateCitizenProfile(
+      phoneNumber,
+      name,
+      address,
+      gender,
+    );
+    if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+      console.log(JSON.stringify(responseStatus));
+      this.setState({
+        toast: true,
+        spinner: false,
+      });
+      setTimeout(
+        () =>
+          this.setState({
+            toast: false,
+          }),
+        3000,
+      ); // hide toast after 5s
+      await AsyncStorage.setItem('REGISTER', '1');
+      await AsyncStorage.setItem('PHONENUMBER', this.state.phoneNumber);
+      await AsyncStorage.setItem('CITIZENNAME', this.state.name);
+      this.props.navigation.navigate('AppNavigator');
+    } else {
+      this.setState({
+        spinner: false,
+      });
+      alert('Không gửi được. Vui lòng thử lại sau');
+    }
+
+    setTimeout(
+      () =>
+        this.setState({
+          toast: false,
+        }),
+      5000,
+    ); // hide toast after 5s
   };
+
+  componentDidMount() {
+    // let phoneNumber = await AsyncStorage.getItem('');
+    AsyncStorage.getItem('fcmToken').then(fcmtoken => {
+      this.setState({
+        token: fcmtoken,
+      });
+    });
+    AsyncStorage.getItem('PHONENUMBER').then(phone => {
+      this.setState({
+        phoneNumber: phone,
+      });
+    });
+  }
 
   render() {
     const {gender} = this.state;

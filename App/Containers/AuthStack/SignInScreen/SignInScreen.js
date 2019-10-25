@@ -10,28 +10,82 @@ import {
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import PhoneInput from 'react-native-phone-input';
+import firebase from 'react-native-firebase';
+import Spinner from 'react-native-loading-spinner-overlay';
+
+import {APIFindUser} from '../../../Services/APIFindUser';
+import {MESSAGES} from '../../../Utils/Constants';
 
 import styles from './SignInScreenStyles';
 import {Images, Colors} from '../../../Themes';
 import {Button} from '../../../Components';
+
 const {width, height} = Dimensions.get('screen');
 
 export class SignInScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      phoneNumber: '',
-    };
+    this.state = {loading: false, phoneNumber: '', confirmResult: null};
   }
-  login = () => {
-    if (this.state.phoneNumber !== '' && this.phone.isValidNumber() === true) {
-      this.state.phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
 
-      this.props.navigation.navigate('ConfirmScreen', {
-        phoneNumber: this.state.phoneNumber,
-        action: 'login',
-      });
+  login = async () => {
+    this.setState({loading: true});
+    if (this.state.phoneNumber !== '' && this.phone.isValidNumber() === true) {
+      const phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
+      // let response = await fetch('http://171.244.3.182/api/v1/Video');
+      // let responseJson = await response.json();
+      // this.setState({loading: false});
+
+      // if (responseJson.status === 'SUCCESS') {
+      //   alert('có rồi');
+      // } else {
+      //   alert('chưa có');
+      // }
+      let responseStatus = await APIFindUser(phoneNumber);
+      if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+        console.log(responseStatus.data);
+        if (responseStatus.data.isFirstLogin === 1) {
+          firebase
+            .auth()
+            .signInWithPhoneNumber(phoneNumber)
+            .then(confirmResult => {
+              this.setState({loading: false});
+              this.props.navigation.navigate('ConfirmScreen', {
+                phoneNumber: this.state.phoneNumber,
+                name: responseStatus.data.name,
+                action: 'updateProfile',
+                confirmResult: confirmResult,
+              });
+            })
+            .catch(error => {
+              this.setState({loading: false});
+              alert(error);
+            });
+        } else {
+          firebase
+            .auth()
+            .signInWithPhoneNumber(phoneNumber)
+            .then(confirmResult => {
+              this.setState({loading: false});
+              this.props.navigation.navigate('ConfirmScreen', {
+                phoneNumber: this.state.phoneNumber,
+                name: responseStatus.data.name,
+                action: 'login',
+                confirmResult: confirmResult,
+              });
+            })
+            .catch(error => {
+              this.setState({loading: false});
+              alert(error);
+            });
+        }
+      } else {
+        this.setState({loading: false});
+        alert('Số điện thoại chưa được đăng ký!!!');
+      }
     } else {
+      this.setState({loading: false});
+
       Alert.alert('Số điện thoại không đúng', '');
     }
   };
@@ -49,6 +103,11 @@ export class SignInScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner
+          visible={this.state.loading}
+          textStyle={{color: '#fff'}}
+          size="large"
+        />
         <View style={styles.viewLogo}>
           <Image source={Images.logoApp} style={styles.logo} />
         </View>
