@@ -31,3 +31,7 @@ export const FIND_USER_API = BASE_URL + 'findUser';
 export const CREATE_CITIZEN_PROFILE = BASE_URL + 'createProfile';
 
 export const UPDATE_CITIZEN_PROFILE = BASE_URL + 'updateProfile';
+
+export const GET_NEWS = BASE_URL + 'getNews';
+
+export const GET_POLICECONTACT = BASE_URL + 'getPoliceContact';

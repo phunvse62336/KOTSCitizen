@@ -6,6 +6,7 @@ import {
   Image,
   Dimensions,
   StyleSheet,
+  Linking,
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -101,11 +102,17 @@ export default class News extends Component {
           <Image style={styles.newsImage} source={{uri: item.image}} />
         </View>
         <View style={styles.newsDescription}>
-          <Text style={styles.topDescription}>{item.subDescription}</Text>
+          <Text style={styles.topDescription} numberOfLines={5}>
+            {item.subContent}
+          </Text>
           <View style={styles.bottomDescription}>
-            <Text style={styles.textSource}>{item.source}</Text>
+            <Text
+              style={styles.textSource}
+              onPress={() => Linking.openURL(item.unitlink)}>
+              {item.source}
+            </Text>
             <Moment fromNow element={Text} style={styles.textDate}>
-              {item.date}
+              {item.created_at}
             </Moment>
           </View>
         </View>

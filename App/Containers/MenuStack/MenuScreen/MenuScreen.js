@@ -154,15 +154,11 @@ export default class MenuScreen extends Component {
                 <Icon name="comment" size={30} style={styles.iconStyle} />
                 <Text style={styles.textTouch}>Gửi feedback</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.viewTouch}>
+              <TouchableOpacity
+                style={styles.viewTouch}
+                onPress={() => this.props.navigation.navigate('PoliceScreen')}>
                 <Icon name="address-book" size={30} style={styles.iconStyle} />
-                <Text style={styles.textTouch}>
-                  Danh sách cảnh sát trong khu vực
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.viewTouch}>
-                <Icon name="phone" size={30} style={styles.iconStyle} />
-                <Text style={styles.textTouch}>Danh sách sđt cảnh sát</Text>
+                <Text style={styles.textTouch}>Danh sách cảnh sát</Text>
               </TouchableOpacity>
             </View>
           </View>

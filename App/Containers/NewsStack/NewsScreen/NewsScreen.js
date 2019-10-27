@@ -6,9 +6,15 @@ import {
   ImageBackground,
   Dimensions,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import HeaderUI from '../../../Components/HeaderUI';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Toast from 'react-native-root-toast';
+
 import News from '../../../Components/News';
+import {APIGetNews} from '../../../Services/APIGetNews';
+import {MESSAGES} from '../../../Utils/Constants';
 
 const {width, height} = Dimensions.get('window');
 
@@ -23,7 +29,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   viewImage: {
-    flex: 0.4,
+    height: height * 0.4,
     width: width,
   },
   viewNews: {
@@ -79,53 +85,53 @@ const styles = StyleSheet.create({
   bottomDescription: {
     flex: 0.2,
   },
+  containerScrollView: {
+    height: '100%',
+  },
 });
-
-const NEWS = [
-  {
-    id: 1,
-    title: 'Công an Hà Nội bổ sung 15 tổ cảnh sát 141',
-    date: '2019-10-23T12:59-0500',
-    source: 'vnexpress.vn',
-    image:
-      'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg',
-    subDescription:
-      'Từ ngày mai (15/10), Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8... ',
-    description:
-      'Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8...Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8... ',
-  },
-  {
-    id: 2,
-    title: 'Công an Hà Nội bổ sung 15 tổ cảnh sát 141',
-    date: '2019-10-23',
-    source: 'vnexpress.vn',
-    image:
-      'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg',
-    subDescription:
-      'Từ ngày mai (15/10), Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8... ',
-    description:
-      'Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8...Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8... ',
-  },
-  {
-    id: 3,
-    title: 'Công an Hà Nội bổ sung 15 tổ cảnh sát 141',
-    date: '2019-10-23',
-    source: 'vnexpress.vn',
-    image:
-      'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg',
-    subDescription:
-      'Từ ngày mai (15/10), Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8... ',
-    description:
-      'Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8...Công an Hà Nội sẽ có thêm 15 tổ cảnh sát 141 hoạt động ở 12 quận và 3 huyện. Họ được trang bị bộ đàm, súng bắn đạn cao su, dùi cui điện, khóa số 8... ',
-  },
-];
 
 export default class NewsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      news: NEWS,
+      loading: false,
+      toast: false,
+      spinner: false,
+      news: [],
     };
+  }
+
+  async componentDidMount() {
+    this.setState({spinner: true});
+    let responseStatus = await APIGetNews();
+    if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+      console.log(JSON.stringify(responseStatus));
+      this.state.news = responseStatus.data;
+      this.setState({
+        toast: true,
+        spinner: false,
+      });
+      setTimeout(
+        () =>
+          this.setState({
+            toast: false,
+          }),
+        3000,
+      ); // hide toast after 5s
+    } else {
+      this.setState({
+        spinner: false,
+      });
+      alert('Không thể kết nối vui lòng thử lại sau');
+    }
+
+    setTimeout(
+      () =>
+        this.setState({
+          toast: false,
+        }),
+      5000,
+    ); // hide toast after 5s
   }
 
   _renderItem = ({item, index}) => (
@@ -135,29 +141,37 @@ export default class NewsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner
+          visible={this.state.spinner}
+          textContent={'Đang Xử Lý'}
+          textStyle={{color: '#fff', zIndex: 0}}
+          size="large"
+        />
         <HeaderUI title="Tin Tức" />
-        <View style={styles.viewImage}>
-          <ImageBackground
-            source={{
-              uri:
-                'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg',
-            }}
-            style={styles.bannerImage}>
-            <View style={styles.textOverImage}>
-              <Text style={styles.textOverImageColor}>
-                Công an Hà Nội bổ sung 15 tổ cảnh sát 141
-              </Text>
-            </View>
-          </ImageBackground>
-        </View>
-        <View style={styles.viewFlat}>
-          <FlatList
-            data={NEWS}
-            extraData={this.state}
-            showsVerticalScrollIndicator={false}
-            renderItem={this._renderItem}
-          />
-        </View>
+        <ScrollView style={styles.containerScrollView}>
+          <View style={styles.viewImage}>
+            <ImageBackground
+              source={{
+                uri:
+                  'https://znews-photo.zadn.vn/w660/Uploaded/ngotgs/2019_10_14/a_1.jpg',
+              }}
+              style={styles.bannerImage}>
+              <View style={styles.textOverImage}>
+                <Text style={styles.textOverImageColor}>
+                  Công an Hà Nội bổ sung 15 tổ cảnh sát 141
+                </Text>
+              </View>
+            </ImageBackground>
+          </View>
+          <View style={styles.viewFlat}>
+            <FlatList
+              data={this.state.news}
+              extraData={this.state}
+              showsVerticalScrollIndicator={false}
+              renderItem={this._renderItem}
+            />
+          </View>
+        </ScrollView>
       </View>
     );
   }

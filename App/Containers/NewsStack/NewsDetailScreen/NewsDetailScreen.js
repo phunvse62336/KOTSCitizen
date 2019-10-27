@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
+  Linking,
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -77,13 +78,17 @@ export default class NewsDetailScreen extends Component {
           </View>
           <View style={styles.viewSubDescription}>
             <Text style={styles.textsubDescription}>
-              {this.state.item.subDescription}
+              {this.state.item.subContent}
             </Text>
           </View>
           <View style={styles.viewTime}>
-            <Text style={styles.textSource}>{this.state.item.source}</Text>
+            <Text
+              style={styles.textSource}
+              onPress={() => Linking.openURL(item.unitlink)}>
+              {this.state.item.source}
+            </Text>
             <Moment fromNow element={Text} style={styles.textDate}>
-              {this.state.item.date}
+              {this.state.item.created_at}
             </Moment>
           </View>
           <Image
@@ -93,7 +98,7 @@ export default class NewsDetailScreen extends Component {
 
           <View style={styles.viewDescription}>
             <Text style={styles.textDescription}>
-              {this.state.item.description}
+              {this.state.item.content}
             </Text>
           </View>
         </View>

@@ -17,6 +17,7 @@ import NewsScreen from '../Containers/NewsStack/NewsScreen/NewsScreen';
 import NewsDetailScreen from '../Containers/NewsStack/NewsDetailScreen/NewsDetailScreen';
 import MenuScreen from '../Containers/MenuStack/MenuScreen/MenuScreen';
 import NotificationScreen from '../Containers/NotificationStack/NotificationScreen/NotificationScreen';
+import PoliceScreen from '../Containers/MenuStack/PoliceScreen/PoliceScreen';
 
 import styles from './Styles/NavigationStyles';
 import {Colors} from '../Themes';
@@ -110,6 +111,14 @@ const MenuTabStack = createStackNavigator({
     screen: MenuScreen,
     navigationOptions: {
       header: null,
+    },
+  },
+  PoliceScreen: {
+    screen: PoliceScreen,
+    navigationOptions: {
+      headerTitle: 'Danh sách cảnh sát',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
     },
   },
 });
