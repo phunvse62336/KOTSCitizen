@@ -15,7 +15,7 @@ import io from 'socket.io-client/dist/socket.io';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import {HeaderUI, Button} from '../../../Components';
-import styles from './CreateProfileScreenStyles';
+import styles from './UpdateProfileScreenStyles';
 import {Colors} from '../../../Themes';
 import {Date} from 'core-js';
 
@@ -26,7 +26,7 @@ const {height, width} = Dimensions.get('window');
 
 const GenderData = ['Nữ', 'Nam', 'Khác'];
 
-export class CreateProfileScreen extends Component {
+export default class UpdateProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,8 +34,7 @@ export class CreateProfileScreen extends Component {
       name: '',
       gender: undefined,
       address: '',
-      dayOfBirth: moment(),
-      token: '',
+      // dayOfBirth: moment(),
     };
   }
 
@@ -88,10 +87,8 @@ export class CreateProfileScreen extends Component {
           }),
         3000,
       ); // hide toast after 5s
-      await AsyncStorage.setItem('LOGIN', '1');
-      await AsyncStorage.setItem('PHONENUMBER', this.state.phoneNumber);
       await AsyncStorage.setItem('CITIZENNAME', this.state.name);
-      this.props.navigation.navigate('AppNavigator');
+      this.props.navigation.goBack();
     } else {
       this.setState({
         spinner: false,
@@ -109,11 +106,6 @@ export class CreateProfileScreen extends Component {
   };
 
   async getLoadedItem() {
-    await AsyncStorage.getItem('fcmToken').then(fcmtoken => {
-      this.setState({
-        token: fcmtoken,
-      });
-    });
     await AsyncStorage.getItem('PHONENUMBER').then(phone => {
       this.setState({
         phoneNumber: phone,
@@ -162,35 +154,35 @@ export class CreateProfileScreen extends Component {
             {this.renderButton(gender, 2, this.onGenderClick)}
           </View>
         </View>
-        <DatePicker
-          style={{width: 200}}
-          date={this.state.dayOfBirth}
-          mode="date"
-          androidMode="spinner"
-          placeholder="select date"
-          format="DD-MM-YYYY"
-          maxDate={date}
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          style={{
-            marginTop: 25,
-            width: width * 0.8,
-            alignItems: 'center',
-          }}
-          customStyles={{
-            dateInput: {
-              borderRadius: 10,
-              borderColor: Colors.appColor,
-              borderWidth: 2,
-              height: 44,
-            },
-            dateText: {color: Colors.appColor},
-            // ... You can check the source to find the other keys.
-          }}
-          onDateChange={date => {
-            this.setState({dayOfBirth: date});
-          }}
-        />
+        {/* <DatePicker
+       style={{width: 200}}
+       date={this.state.dayOfBirth}
+       mode="date"
+       androidMode="spinner"
+       placeholder="select date"
+       format="DD-MM-YYYY"
+       maxDate={date}
+       confirmBtnText="Confirm"
+       cancelBtnText="Cancel"
+       style={{
+         marginTop: 25,
+         width: width * 0.8,
+         alignItems: 'center',
+       }}
+       customStyles={{
+         dateInput: {
+           borderRadius: 10,
+           borderColor: Colors.appColor,
+           borderWidth: 2,
+           height: 44,
+         },
+         dateText: {color: Colors.appColor},
+         // ... You can check the source to find the other keys.
+       }}
+       onDateChange={date => {
+         this.setState({dayOfBirth: date});
+       }}
+     /> */}
         <Button
           label="Cập Nhật"
           buttonTextStyle={styles.updateTextButton}
@@ -201,5 +193,4 @@ export class CreateProfileScreen extends Component {
     );
   }
 }
-
-export default CreateProfileScreen;
+export {UpdateProfileScreen};

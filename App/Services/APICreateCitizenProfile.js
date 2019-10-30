@@ -10,7 +10,7 @@ export const APICreateCitizenProfile = async (phoneNumber, citizenToken) => {
       },
       body: JSON.stringify({
         phone: phoneNumber,
-        role: '1',
+        role: 1,
         token: citizenToken,
       }),
     });

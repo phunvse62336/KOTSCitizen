@@ -7,6 +7,7 @@ import {
   Dimensions,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import HeaderUI from '../../../Components/HeaderUI';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -15,6 +16,7 @@ import Toast from 'react-native-root-toast';
 import News from '../../../Components/News';
 import {APIGetNews} from '../../../Services/APIGetNews';
 import {MESSAGES} from '../../../Utils/Constants';
+import {Colors} from '../../../Themes';
 
 const {width, height} = Dimensions.get('window');
 
@@ -88,6 +90,21 @@ const styles = StyleSheet.create({
   containerScrollView: {
     height: '100%',
   },
+  textLoadMore: {
+    textAlign: 'center',
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  btnLoad: {
+    backgroundColor: Colors.appColor,
+    padding: 10,
+    width: width * 0.3,
+    borderRadius: 5,
+    alignSelf: 'center',
+    marginBottom: 10,
+    marginTop: 10,
+  },
 });
 
 export default class NewsScreen extends Component {
@@ -98,8 +115,15 @@ export default class NewsScreen extends Component {
       toast: false,
       spinner: false,
       news: [],
+      itemsCount: 5,
     };
   }
+
+  renderNewItem = () => {
+    if (this.state.itemsCount < this.state.news.length) {
+      this.setState(prevState => ({itemsCount: prevState.itemsCount + 5}));
+    }
+  };
 
   async componentDidMount() {
     this.setState({spinner: true});
@@ -165,12 +189,16 @@ export default class NewsScreen extends Component {
           </View>
           <View style={styles.viewFlat}>
             <FlatList
-              data={this.state.news}
+              data={this.state.news.slice(0, this.state.itemsCount)}
               extraData={this.state}
               showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => item}
               renderItem={this._renderItem}
             />
           </View>
+          <TouchableOpacity style={styles.btnLoad} onPress={this.renderNewItem}>
+            <Text style={styles.textLoadMore}>Xem Thêm</Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     );

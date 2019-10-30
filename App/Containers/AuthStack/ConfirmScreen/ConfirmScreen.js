@@ -49,18 +49,18 @@ export class SignInScreen extends Component {
     if (this.state.action === 'register') {
       let responseStatus = await APICreateCitizenProfile(phoneNumber, token);
       if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
-        firebase
-          .auth()
-          .signInWithPhoneNumber(phoneNumber)
-          .then(confirmResult => {
-            this.setState({loading: false});
-            AsyncStorage.setItem('PHONENUMBER', this.state.phoneNumber);
-            this.props.navigation.navigate('CreateProfile');
-          })
-          .catch(error => {
-            this.setState({loading: false});
-            alert(error);
-          });
+        // firebase
+        //   .auth()
+        //   .signInWithPhoneNumber(phoneNumber)
+        //   .then(confirmResult => {
+        //     this.setState({loading: false});
+        AsyncStorage.setItem('PHONENUMBER', this.state.phoneNumber);
+        this.props.navigation.navigate('CreateProfile');
+        // })
+        // .catch(error => {
+        //   this.setState({loading: false});
+        //   alert(error);
+        // });
       }
     }
     if (this.state.action === 'updateProfile') {
@@ -93,13 +93,16 @@ export class SignInScreen extends Component {
         });
     }
   }
-
-  componentDidMount() {
-    AsyncStorage.getItem('fcmToken').then(fcmtoken => {
+  async getToken() {
+    await AsyncStorage.getItem('fcmToken').then(fcmtoken => {
       this.setState({
         token: fcmtoken,
       });
     });
+  }
+
+  componentDidMount() {
+    this.getToken();
   }
 
   render() {

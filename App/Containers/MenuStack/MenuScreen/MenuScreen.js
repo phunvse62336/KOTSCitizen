@@ -108,18 +108,22 @@ export default class MenuScreen extends Component {
     };
   }
 
-  componentDidMount() {
-    // let phoneNumber = await AsyncStorage.getItem('');
-    AsyncStorage.getItem('PHONENUMBER').then(phone => {
+  async getLoadedItem() {
+    await AsyncStorage.getItem('PHONENUMBER').then(phone => {
       this.setState({
         phoneNumber: phone,
       });
     });
-    AsyncStorage.getItem('CITIZENNAME').then(name => {
+    await AsyncStorage.getItem('CITIZENNAME').then(name => {
       this.setState({
         name: name,
       });
     });
+  }
+
+  componentDidMount() {
+    // let phoneNumber = await AsyncStorage.getItem('');
+    this.getLoadedItem();
   }
 
   logout = async () => {
@@ -169,7 +173,11 @@ export default class MenuScreen extends Component {
                 <Icon name="user" size={30} style={styles.iconStyle} />
                 <Text style={styles.textTouch}>Xem thông tin chi tiết</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.viewTouch}>
+              <TouchableOpacity
+                style={styles.viewTouch}
+                onPress={() =>
+                  this.props.navigation.navigate('UpdateProfileScreen')
+                }>
                 <Icon name="user-plus" size={30} style={styles.iconStyle} />
                 <Text style={styles.textTouch}>Sửa đổi profile</Text>
               </TouchableOpacity>

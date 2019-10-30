@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -33,6 +34,7 @@ const styles = StyleSheet.create({
     color: Colors.appColor,
     marginBottom: 5,
     textAlign: 'left',
+    fontWeight: 'bold',
   },
   textInfo: {
     fontSize: 16,
@@ -61,7 +63,9 @@ export default class Police extends Component {
   render() {
     const {item} = this.props;
     return (
-      <TouchableOpacity style={styles.viewAccount}>
+      <TouchableOpacity
+        style={styles.viewAccount}
+        onPress={() => Linking.openURL(`tel:${item.phone}`)}>
         <View style={styles.viewAccountInfo}>
           <View style={styles.viewInfo}>
             <View style={styles.viewLeft}>
