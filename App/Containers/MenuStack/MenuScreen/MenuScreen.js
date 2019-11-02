@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const {width, height} = Dimensions.get('window');
 import Colors from '../../../Themes/Colors';
 import firebase from 'react-native-firebase';
+import {APIRemoveToken} from '../../../Services/APIRemoveToken';
 
 const styles = StyleSheet.create({
   container: {
@@ -104,32 +105,36 @@ export default class MenuScreen extends Component {
     super(props);
     this.state = {
       phoneNumber: '',
-      name: '',
+      user: {},
     };
   }
 
-  async getLoadedItem() {
+  refresh = data => {
+    this.setState({
+      name: data,
+    });
+  };
+
+  componentDidMount = async () => {
     await AsyncStorage.getItem('PHONENUMBER').then(phone => {
       this.setState({
         phoneNumber: phone,
       });
     });
-    await AsyncStorage.getItem('CITIZENNAME').then(name => {
+    await AsyncStorage.getItem('USER').then(user => {
       this.setState({
-        name: name,
+        user: JSON.parse(user),
       });
     });
-  }
-
-  componentDidMount() {
-    // let phoneNumber = await AsyncStorage.getItem('');
-    this.getLoadedItem();
-  }
+    console.log(this.state.user);
+  };
 
   logout = async () => {
+    const phoneNumber = this.state.phoneNumber;
     try {
       await firebase.auth().signOut();
       AsyncStorage.clear();
+      let responseStatus = await APIRemoveToken(phoneNumber);
       this.props.navigation.navigate('AuthNavigator');
     } catch (error) {
       alert('có lỗi');
@@ -145,7 +150,7 @@ export default class MenuScreen extends Component {
               <Icon name="user" size={35} color="#ffffff" />
             </View>
             <View style={styles.viewName}>
-              <Text style={styles.textName}>{this.state.name}</Text>
+              <Text style={styles.textName}>{this.state.user.name}</Text>
               <Text style={styles.textPhone}>{this.state.phoneNumber}</Text>
             </View>
           </View>
@@ -154,9 +159,13 @@ export default class MenuScreen extends Component {
           <View style={styles.viewBasic}>
             <Text style={styles.textSettingTitle}>Chức năng</Text>
             <View style={styles.viewFunctionBasic}>
-              <TouchableOpacity style={styles.viewTouch}>
+              <TouchableOpacity
+                style={styles.viewTouch}
+                onPress={() =>
+                  this.props.navigation.navigate('FeedBackScreen')
+                }>
                 <Icon name="comment" size={30} style={styles.iconStyle} />
-                <Text style={styles.textTouch}>Gửi feedback</Text>
+                <Text style={styles.textTouch}>Gửi phản hồi</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.viewTouch}
@@ -169,14 +178,20 @@ export default class MenuScreen extends Component {
           <View style={styles.viewInfo}>
             <Text style={styles.textSettingTitle}>Tài khoản</Text>
             <View style={styles.viewFunctionInfo}>
-              <TouchableOpacity style={styles.viewTouch}>
+              <TouchableOpacity
+                style={styles.viewTouch}
+                onPress={() =>
+                  this.props.navigation.navigate('CitizenDetailScreen')
+                }>
                 <Icon name="user" size={30} style={styles.iconStyle} />
                 <Text style={styles.textTouch}>Xem thông tin chi tiết</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.viewTouch}
                 onPress={() =>
-                  this.props.navigation.navigate('UpdateProfileScreen')
+                  this.props.navigation.navigate('UpdateProfileScreen', {
+                    onGoBack: this.refresh,
+                  })
                 }>
                 <Icon name="user-plus" size={30} style={styles.iconStyle} />
                 <Text style={styles.textTouch}>Sửa đổi profile</Text>

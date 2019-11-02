@@ -1,14 +1,15 @@
-import {FIND_USER_API} from '../Utils/Constants';
+import {LOGIN_API} from '../Utils/Constants';
 import axios from 'axios';
 
-export const APIFindUser = async phoneNumber => {
+export const APILogin = async (phoneNumber, token) => {
   try {
     let response = await axios
-      .post(FIND_USER_API, {
+      .post(LOGIN_API, {
         phone: phoneNumber,
-        role: 1,
+        token: token,
       })
       .then(res => {
+        console.log(res);
         return res.data;
       })
       .catch(err => {

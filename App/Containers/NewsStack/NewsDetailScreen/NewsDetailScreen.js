@@ -8,6 +8,7 @@ import {
   Dimensions,
   Linking,
 } from 'react-native';
+import 'moment/locale/vi';
 
 const {width, height} = Dimensions.get('window');
 import Moment from 'react-moment';
@@ -87,7 +88,7 @@ export default class NewsDetailScreen extends Component {
               onPress={() => Linking.openURL(item.unitlink)}>
               {this.state.item.source}
             </Text>
-            <Moment fromNow element={Text} style={styles.textDate}>
+            <Moment fromNow locale="vi" element={Text} style={styles.textDate}>
               {this.state.item.created_at}
             </Moment>
           </View>

@@ -1,14 +1,14 @@
-import {FIND_USER_API} from '../Utils/Constants';
+import {REMOVE_TOKEN_API} from '../Utils/Constants';
 import axios from 'axios';
 
-export const APIFindUser = async phoneNumber => {
+export const APIRemoveToken = async phoneNumber => {
   try {
     let response = await axios
-      .post(FIND_USER_API, {
+      .post(REMOVE_TOKEN_API, {
         phone: phoneNumber,
-        role: 1,
       })
       .then(res => {
+        console.log(res);
         return res.data;
       })
       .catch(err => {

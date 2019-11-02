@@ -35,3 +35,9 @@ export const UPDATE_CITIZEN_PROFILE = BASE_URL + 'updateProfile';
 export const GET_NEWS = BASE_URL + 'getNews';
 
 export const GET_POLICECONTACT = BASE_URL + 'getPoliceContact';
+
+export const GET_CASE_API = BASE_URL + 'getCase';
+
+export const LOGIN_API = BASE_URL + 'login';
+
+export const REMOVE_TOKEN_API = BASE_URL + 'removeToken';

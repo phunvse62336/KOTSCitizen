@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import {APICreateCitizenProfile} from '../../../Services/APICreateCitizenProfile';
+import {APILogin} from '../../../Services/APILogin';
 import {MESSAGES} from '../../../Utils/Constants';
 
 import {Images, Colors} from '../../../Themes';
@@ -32,6 +33,7 @@ export class SignInScreen extends Component {
       phoneNumber: this.props.navigation.state.params.phoneNumber,
       action: this.props.navigation.state.params.action,
       token: '',
+      user: this.props.navigation.state.params.user,
       confirmResult: this.props.navigation.state.params.confirmResult,
     };
   }
@@ -40,27 +42,20 @@ export class SignInScreen extends Component {
     console.log(this.state.action);
     const {phoneNumber, token} = this.state;
     if (this.state.action === 'login') {
-      await AsyncStorage.setItem('LOGIN', '1');
-      await AsyncStorage.setItem('PHONENUMBER', this.state.phoneNumber);
-      await AsyncStorage.setItem('CITIZENNAME', this.state.name);
-
-      this.props.navigation.navigate('AppNavigator');
+      let user = JSON.stringify(this.state.user);
+      let responseStatus = await APILogin(phoneNumber, token);
+      if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+        await AsyncStorage.setItem('LOGIN', '1');
+        await AsyncStorage.setItem('PHONENUMBER', this.state.phoneNumber);
+        await AsyncStorage.setItem('USER', user);
+        this.props.navigation.navigate('AppNavigator');
+      }
     }
     if (this.state.action === 'register') {
       let responseStatus = await APICreateCitizenProfile(phoneNumber, token);
       if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
-        // firebase
-        //   .auth()
-        //   .signInWithPhoneNumber(phoneNumber)
-        //   .then(confirmResult => {
-        //     this.setState({loading: false});
         AsyncStorage.setItem('PHONENUMBER', this.state.phoneNumber);
         this.props.navigation.navigate('CreateProfile');
-        // })
-        // .catch(error => {
-        //   this.setState({loading: false});
-        //   alert(error);
-        // });
       }
     }
     if (this.state.action === 'updateProfile') {
@@ -71,7 +66,6 @@ export class SignInScreen extends Component {
 
   _onFulfill(code) {
     this.setState({loading: true});
-
     const {confirmResult} = this.state;
     if (confirmResult && code.length) {
       confirmResult
@@ -79,31 +73,27 @@ export class SignInScreen extends Component {
         .then(async user => {
           this.setState({loading: false});
           this.confirm();
-          // alert(JSON.stringify(user));
-          // await AsyncStorage.setItem('LOGIN', '1');
-          // this.props.navigation.navigate('AppNavigator');
         })
         .catch(error => {
           this.setState({loading: false});
           Alert.alert('Confirmation Code', 'Code not match!', [{text: 'OK'}], {
             cancelable: false,
           });
-
           this.refs.codeInput.clear();
         });
     }
   }
-  async getToken() {
-    await AsyncStorage.getItem('fcmToken').then(fcmtoken => {
-      this.setState({
-        token: fcmtoken,
-      });
-    });
-  }
 
-  componentDidMount() {
-    this.getToken();
-  }
+  componentDidMount = async () => {
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        await AsyncStorage.setItem('fcmToken', fcmToken);
+      }
+    }
+    this.setState({token: fcmToken});
+  };
 
   render() {
     return (

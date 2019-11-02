@@ -32,15 +32,6 @@ export class SignInScreen extends Component {
     this.setState({loading: true});
     if (this.state.phoneNumber !== '' && this.phone.isValidNumber() === true) {
       const phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
-      // let response = await fetch('http://171.244.3.182/api/v1/Video');
-      // let responseJson = await response.json();
-      // this.setState({loading: false});
-
-      // if (responseJson.status === 'SUCCESS') {
-      //   alert('có rồi');
-      // } else {
-      //   alert('chưa có');
-      // }
       let responseStatus = await APIFindUser(phoneNumber);
       if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
         console.log(responseStatus.data);
@@ -71,6 +62,7 @@ export class SignInScreen extends Component {
                 phoneNumber: this.state.phoneNumber,
                 name: responseStatus.data.name,
                 action: 'login',
+                user: responseStatus.data,
                 confirmResult: confirmResult,
               });
             })

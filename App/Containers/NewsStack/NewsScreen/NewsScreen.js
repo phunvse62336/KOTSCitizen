@@ -96,6 +96,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  textEndLoadMore: {
+    textAlign: 'center',
+    color: '#696969',
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    marginBottom: 10,
+    marginTop: 10,
+  },
   btnLoad: {
     backgroundColor: Colors.appColor,
     padding: 10,
@@ -196,9 +205,19 @@ export default class NewsScreen extends Component {
               renderItem={this._renderItem}
             />
           </View>
-          <TouchableOpacity style={styles.btnLoad} onPress={this.renderNewItem}>
+          {this.state.itemsCount < this.state.news.length && (
+            <TouchableOpacity
+              style={styles.btnLoad}
+              onPress={this.renderNewItem}>
+              <Text style={styles.textLoadMore}>Xem Thêm</Text>
+            </TouchableOpacity>
+          )}
+          {this.state.itemsCount >= this.state.news.length && (
+            <Text style={styles.textEndLoadMore}>Hết tin</Text>
+          )}
+          {/* <TouchableOpacity style={styles.btnLoad} onPress={this.renderNewItem}>
             <Text style={styles.textLoadMore}>Xem Thêm</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </ScrollView>
       </View>
     );

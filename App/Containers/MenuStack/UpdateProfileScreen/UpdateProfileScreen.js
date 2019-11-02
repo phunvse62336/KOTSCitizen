@@ -88,6 +88,7 @@ export default class UpdateProfileScreen extends Component {
         3000,
       ); // hide toast after 5s
       await AsyncStorage.setItem('CITIZENNAME', this.state.name);
+      this.props.navigation.state.params.onGoBack(this.state.name);
       this.props.navigation.goBack();
     } else {
       this.setState({

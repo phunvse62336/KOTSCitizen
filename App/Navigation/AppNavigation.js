@@ -19,6 +19,9 @@ import MenuScreen from '../Containers/MenuStack/MenuScreen/MenuScreen';
 import NotificationScreen from '../Containers/NotificationStack/NotificationScreen/NotificationScreen';
 import PoliceScreen from '../Containers/MenuStack/PoliceScreen/PoliceScreen';
 import UpdateProfileScreen from '../Containers/MenuStack/UpdateProfileScreen/UpdateProfileScreen';
+import NotificationDetailScreen from '../Containers/NotificationStack/NotificationDetailScreen/NotificationDetailScreen';
+import FeedBackScreen from '../Containers/MenuStack/FeedBackScreen/FeedBackScreen';
+import CitizenDetailScreen from '../Containers/MenuStack/CitizenDetailScreen/CitizenDetailScreen';
 
 import styles from './Styles/NavigationStyles';
 import {Colors} from '../Themes';
@@ -105,6 +108,14 @@ const SOSTabStack = createStackNavigator({
       header: null,
     },
   },
+  NotificationDetailScreen: {
+    screen: NotificationDetailScreen,
+    navigationOptions: {
+      headerTitle: 'Chi tiết sự cố',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
+    },
+  },
 });
 
 const MenuTabStack = createStackNavigator({
@@ -126,6 +137,22 @@ const MenuTabStack = createStackNavigator({
     screen: UpdateProfileScreen,
     navigationOptions: {
       headerTitle: 'Sửa đổi profile',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
+    },
+  },
+  FeedBackScreen: {
+    screen: FeedBackScreen,
+    navigationOptions: {
+      headerTitle: 'Gửi phản hồi',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
+    },
+  },
+  CitizenDetailScreen: {
+    screen: CitizenDetailScreen,
+    navigationOptions: {
+      headerTitle: 'Thông tin chi tiết',
       headerTintColor: Colors.appColor,
       headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
     },
