@@ -21,6 +21,7 @@ import {MESSAGES} from '../../../Utils/Constants';
 import {Images, Colors} from '../../../Themes';
 import styles from './ConfirmScreenStyles';
 import {Button} from '../../../Components';
+import {thisExpression} from '@babel/types';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -105,7 +106,7 @@ export class SignInScreen extends Component {
         />
         <View style={styles.viewHeader}>
           <View style={styles.alignCenter}>
-            <Text style={styles.helloText}>Xin Chào Hiệp Sĩ</Text>
+            <Text style={styles.helloText}>Xin Chào</Text>
             <Text style={styles.sendText}>
               Chúng tôi đã gửi mã xác nhận đến{'\n'}số điện thoại của bạn
             </Text>

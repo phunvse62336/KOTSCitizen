@@ -124,7 +124,6 @@ export default class UpdateProfileScreen extends Component {
     let date = moment();
     return (
       <SafeAreaView style={styles.container}>
-        <HeaderUI />
         <View style={styles.inputViewContainer}>
           <View style={styles.inputViewLabel}>
             <Text style={styles.colorText}>Họ Tên</Text>

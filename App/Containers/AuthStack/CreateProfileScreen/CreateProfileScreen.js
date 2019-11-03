@@ -20,6 +20,7 @@ import {Colors} from '../../../Themes';
 import {Date} from 'core-js';
 
 import {APIUpdateCitizenProfile} from '../../../Services/APIUpdateCitizenProfile';
+import {APIFindUser} from '../../../Services/APIFindUser';
 import {MESSAGES} from '../../../Utils/Constants';
 
 const {height, width} = Dimensions.get('window');
@@ -66,6 +67,15 @@ export class CreateProfileScreen extends Component {
     </TouchableOpacity>
   );
 
+  loadProfileUser = async () => {
+    const {phoneNumber, token} = this.state;
+    let responseStatus = await APIFindUser(phoneNumber);
+    if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+      let user = JSON.stringify(responseStatus.data);
+      await AsyncStorage.setItem('USER', user);
+    }
+  };
+
   onUpdate = async () => {
     const {phoneNumber, name, address, gender} = this.state;
     this.setState({spinner: true});
@@ -88,9 +98,11 @@ export class CreateProfileScreen extends Component {
           }),
         3000,
       ); // hide toast after 5s
+      this.loadProfileUser();
       await AsyncStorage.setItem('LOGIN', '1');
       await AsyncStorage.setItem('PHONENUMBER', this.state.phoneNumber);
       await AsyncStorage.setItem('CITIZENNAME', this.state.name);
+
       this.props.navigation.navigate('AppNavigator');
     } else {
       this.setState({
