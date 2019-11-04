@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
     width: width,
   },
   viewNews: {
-    flex: 0.6,
+    flex: 1,
     width: width,
   },
   viewFlat: {
-    flex: 0.6,
+    flex: 1,
     width: width,
   },
   textOverImageColor: {
@@ -182,7 +182,7 @@ export default class NewsScreen extends Component {
         />
         <HeaderUI title="Tin Tức" />
         <ScrollView style={styles.containerScrollView}>
-          <View style={styles.viewImage}>
+          {/* <View style={styles.viewImage}>
             <ImageBackground
               source={{
                 uri:
@@ -195,7 +195,7 @@ export default class NewsScreen extends Component {
                 </Text>
               </View>
             </ImageBackground>
-          </View>
+          </View> */}
           <View style={styles.viewFlat}>
             <FlatList
               data={this.state.news.slice(0, this.state.itemsCount)}

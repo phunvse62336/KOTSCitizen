@@ -35,6 +35,7 @@ export default class UpdateProfileScreen extends Component {
       gender: undefined,
       address: '',
       // dayOfBirth: moment(),
+      edit: false,
     };
   }
 
@@ -66,58 +67,60 @@ export default class UpdateProfileScreen extends Component {
   );
 
   onUpdate = async () => {
-    const {phoneNumber, name, address, gender} = this.state;
-    this.setState({spinner: true});
-    let responseStatus = await APIUpdateCitizenProfile(
-      phoneNumber,
-      name,
-      address,
-      gender,
-    );
-    if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
-      console.log(JSON.stringify(responseStatus));
-      this.setState({
-        toast: true,
-        spinner: false,
-      });
+    const {phoneNumber, name, address, gender, edit} = this.state;
+    if (this.state.edit === false) {
+      this.setState({edit: true});
+    } else {
+      this.setState({spinner: true});
+      let responseStatus = await APIUpdateCitizenProfile(
+        phoneNumber,
+        name,
+        address,
+        gender,
+      );
+      if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+        console.log(JSON.stringify(responseStatus));
+        this.setState({
+          toast: true,
+          spinner: false,
+        });
+        setTimeout(
+          () =>
+            this.setState({
+              toast: false,
+            }),
+          3000,
+        ); // hide toast after 5s
+        this.props.navigation.state.params.onGoBack(this.state.name);
+        this.props.navigation.goBack();
+      } else {
+        this.setState({
+          spinner: false,
+        });
+        alert('Không gửi được. Vui lòng thử lại sau');
+      }
+
       setTimeout(
         () =>
           this.setState({
             toast: false,
           }),
-        3000,
+        5000,
       ); // hide toast after 5s
-      await AsyncStorage.setItem('CITIZENNAME', this.state.name);
-      this.props.navigation.state.params.onGoBack(this.state.name);
-      this.props.navigation.goBack();
-    } else {
-      this.setState({
-        spinner: false,
-      });
-      alert('Không gửi được. Vui lòng thử lại sau');
     }
-
-    setTimeout(
-      () =>
-        this.setState({
-          toast: false,
-        }),
-      5000,
-    ); // hide toast after 5s
   };
 
-  async getLoadedItem() {
-    await AsyncStorage.getItem('PHONENUMBER').then(phone => {
-      this.setState({
-        phoneNumber: phone,
-      });
-    });
-  }
+  componentDidMount = async () => {
+    let user = await AsyncStorage.getItem('USER');
+    let userInfo = JSON.parse(user);
 
-  componentDidMount() {
-    // let phoneNumber = await AsyncStorage.getItem('');
-    this.getLoadedItem();
-  }
+    this.setState({
+      phoneNumber: userInfo.id,
+      name: userInfo.name,
+      gender: parseInt(userInfo.gender),
+      address: userInfo.address,
+    });
+  };
 
   render() {
     const {gender} = this.state;
@@ -142,6 +145,8 @@ export default class UpdateProfileScreen extends Component {
             style={styles.inputView}
             keyboardType="email-address"
             onChangeText={this.onChangeTextAddress}
+            value={this.state.address}
+            editable={this.state.edit}
           />
         </View>
         <View style={styles.buttonGroupContainer}>
@@ -184,7 +189,7 @@ export default class UpdateProfileScreen extends Component {
        }}
      /> */}
         <Button
-          label="Cập Nhật"
+          label={this.state.edit === false ? 'Sửa' : 'Cập Nhật'}
           buttonTextStyle={styles.updateTextButton}
           buttonStyle={styles.updateButton}
           buttonFunc={this.onUpdate}

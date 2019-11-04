@@ -110,23 +110,17 @@ export default class MenuScreen extends Component {
   }
 
   refresh = data => {
-    this.setState({
-      name: data,
+    this.setState(prevState => {
+      let user = Object.assign({}, prevState.user); // creating copy of state variable jasper
+      user.name = data; // update the name property, assign a new value
+      return {user}; // return new object jasper object
     });
   };
 
   componentDidMount = async () => {
-    await AsyncStorage.getItem('PHONENUMBER').then(phone => {
-      this.setState({
-        phoneNumber: phone,
-      });
-    });
-    await AsyncStorage.getItem('USER').then(user => {
-      this.setState({
-        user: JSON.parse(user),
-      });
-    });
-    console.log(this.state.user);
+    let phone = await AsyncStorage.getItem('PHONENUMBER');
+    let user = await AsyncStorage.getItem('USER');
+    this.setState({phoneNumber: phone, user: JSON.parse(user)});
   };
 
   logout = async () => {

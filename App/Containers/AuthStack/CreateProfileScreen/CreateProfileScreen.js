@@ -120,23 +120,17 @@ export class CreateProfileScreen extends Component {
     ); // hide toast after 5s
   };
 
-  async getLoadedItem() {
-    await AsyncStorage.getItem('fcmToken').then(fcmtoken => {
-      this.setState({
-        token: fcmtoken,
-      });
-    });
-    await AsyncStorage.getItem('PHONENUMBER').then(phone => {
-      this.setState({
-        phoneNumber: phone,
-      });
-    });
-  }
-
-  componentDidMount() {
-    // let phoneNumber = await AsyncStorage.getItem('');
-    this.getLoadedItem();
-  }
+  componentDidMount = async () => {
+    let phone = await AsyncStorage.getItem('PHONENUMBER');
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        await AsyncStorage.setItem('fcmToken', fcmToken);
+      }
+    }
+    this.setState({token: fcmToken, phoneNumber: phone});
+  };
 
   render() {
     const {gender} = this.state;

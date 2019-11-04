@@ -95,11 +95,9 @@ class CitizenDetailScreen extends Component {
   }
 
   componentDidMount = async () => {
-    await AsyncStorage.getItem('PHONENUMBER').then(phone => {
-      this.setState({
-        phoneNumber: phone,
-      });
-    });
+    let phone = await AsyncStorage.getItem('PHONENUMBER');
+    this.setState({phoneNumber: phone});
+    
     console.log(this.state.phoneNumber);
     const phoneNumber = this.state.phoneNumber;
     this.setState({spinner: true});
