@@ -6,6 +6,7 @@ export const APIUpdateCitizenProfile = async (
   name,
   address,
   gender,
+  dateOfBirth,
 ) => {
   try {
     console.log(phoneNumber);
@@ -15,6 +16,7 @@ export const APIUpdateCitizenProfile = async (
         name: name,
         address: address,
         gender: gender,
+        dateOfBirth: dateOfBirth,
       })
       .then(res => {
         return res.data;

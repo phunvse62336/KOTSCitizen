@@ -138,6 +138,7 @@ export class HomeScreen extends Component {
     if (name === 'bt_sos') {
       this.setState({spinner: true});
       let responseStatus = await APISendSOS(phoneNumber, longitude, latitude);
+      // console.log(phoneNumber, longitude, latitude);
       if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
         console.log(JSON.stringify(responseStatus));
         this.setState({

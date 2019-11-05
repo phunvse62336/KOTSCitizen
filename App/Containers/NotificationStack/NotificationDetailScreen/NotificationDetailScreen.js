@@ -99,7 +99,7 @@ export default class NotificationDetailScreen extends Component {
                 <CustomCallout>
                   <Text style={{fontSize: 18}}>Thông tin tín hiệu</Text>
                   <Text>Nội dung: {this.state.item.message}</Text>
-                  <Text>Liên hệ: {this.state.item.citizenId}</Text>
+                  <Text>Người gửi: {this.state.item.citizenId}</Text>
                 </CustomCallout>
               </Callout>
             </Marker>
@@ -111,7 +111,7 @@ export default class NotificationDetailScreen extends Component {
               <Text style={styles.buttonText}>hiệp sĩ nhận: </Text>
             </View>
             <View>
-              {this.state.item.knightConfirmId === '' && (
+              {this.state.item.knightConfirmId === null && (
                 <Text style={styles.buttonText}>Đang cập nhật</Text>
               )}
               {this.state.item.knightConfirmId !== '' && (
@@ -127,7 +127,7 @@ export default class NotificationDetailScreen extends Component {
             </View>
             <View>
               <Text style={styles.buttonText}>
-                {this.state.item.knightConfirmId === '' && (
+                {this.state.item.knightConfirmId === null && (
                   <Text style={styles.buttonText}>Đang cập nhật</Text>
                 )}
                 {this.state.item.knightConfirmId !== '' && (

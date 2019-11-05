@@ -77,13 +77,14 @@ export class CreateProfileScreen extends Component {
   };
 
   onUpdate = async () => {
-    const {phoneNumber, name, address, gender} = this.state;
+    const {phoneNumber, name, address, gender, dayOfBirth} = this.state;
     this.setState({spinner: true});
     let responseStatus = await APIUpdateCitizenProfile(
       phoneNumber,
       name,
       address,
       gender,
+      dayOfBirth,
     );
     if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
       console.log(JSON.stringify(responseStatus));
