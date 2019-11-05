@@ -49,6 +49,7 @@ export default class UpdateProfileScreen extends Component {
 
   renderButton = (currentGender, indexGender, onPress) => (
     <TouchableOpacity
+      disabled={!this.state.edit}
       onPress={() => onPress(indexGender)}
       style={
         currentGender === indexGender
@@ -132,9 +133,11 @@ export default class UpdateProfileScreen extends Component {
             <Text style={styles.colorText}>Họ Tên</Text>
           </View>
           <TextInput
-            style={styles.inputView}
-            keyboardType="email-address"
-            onChangeText={this.onChangeTextName}
+             style={styles.inputView}
+             keyboardType="email-address"
+             onChangeText={this.onChangeTextName}
+             value={this.state.name}
+             editable={this.state.edit}
           />
         </View>
         <View style={styles.inputViewContainer}>

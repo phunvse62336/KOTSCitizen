@@ -175,12 +175,14 @@ export default class MenuScreen extends Component {
               <TouchableOpacity
                 style={styles.viewTouch}
                 onPress={() =>
-                  this.props.navigation.navigate('CitizenDetailScreen')
+                  this.props.navigation.navigate('UpdateProfileScreen', {
+                    onGoBack: this.refresh,
+                  })
                 }>
                 <Icon name="user" size={30} style={styles.iconStyle} />
                 <Text style={styles.textTouch}>Xem thông tin chi tiết</Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.viewTouch}
                 onPress={() =>
                   this.props.navigation.navigate('UpdateProfileScreen', {
@@ -189,7 +191,7 @@ export default class MenuScreen extends Component {
                 }>
                 <Icon name="user-plus" size={30} style={styles.iconStyle} />
                 <Text style={styles.textTouch}>Sửa đổi profile</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity style={styles.viewTouch} onPress={this.logout}>
                 <Icon name="sign-out" size={30} style={styles.iconStyle} />
                 <Text style={styles.textTouch}>Đăng xuất</Text>

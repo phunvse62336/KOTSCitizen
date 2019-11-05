@@ -111,9 +111,14 @@ export default class NotificationDetailScreen extends Component {
               <Text style={styles.buttonText}>hiệp sĩ nhận: </Text>
             </View>
             <View>
-              <Text style={styles.buttonText}>
-                {this.state.item.knightConfirmId}
-              </Text>
+              {this.state.item.knightConfirmId === '' && (
+                <Text style={styles.buttonText}>Đang cập nhật</Text>
+              )}
+              {this.state.item.knightConfirmId !== '' && (
+                <Text style={styles.buttonText}>
+                  {this.state.item.knightConfirmId}
+                </Text>
+              )}
             </View>
           </View>
           <View style={styles.viewRow}>
@@ -122,7 +127,14 @@ export default class NotificationDetailScreen extends Component {
             </View>
             <View>
               <Text style={styles.buttonText}>
-                {this.state.item.knightCloseId}
+                {this.state.item.knightConfirmId === '' && (
+                  <Text style={styles.buttonText}>Đang cập nhật</Text>
+                )}
+                {this.state.item.knightConfirmId !== '' && (
+                  <Text style={styles.buttonText}>
+                    {this.state.item.knightCloseId}
+                  </Text>
+                )}
               </Text>
             </View>
           </View>

@@ -50,6 +50,7 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: Colors.appColor,
+    marginBottom: 20,
   },
   inputMessage: {
     width: '100%',

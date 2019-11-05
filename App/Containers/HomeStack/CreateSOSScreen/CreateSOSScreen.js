@@ -184,21 +184,21 @@ export default class CreateSOSScreen extends Component {
           path: path,
           fileName: response.fileName,
         };
-        this.setState({
-          photoSource: image,
-          videoSource: null,
-          audioSource: null,
-        });
-        // FirebaseService.uploadImage(image)
-        //   .then(url => {
-        //     alert('uploaded');
-        //     this.setState({
-        //       photoSource: url,
-        //       videoSource: null,
-        //       audioSource: null,
-        //     });
-        //   })
-        //   .catch(error => console.log(error));
+        // this.setState({
+        //   photoSource: image,
+        //   videoSource: null,
+        //   audioSource: null,
+        // });
+        FirebaseService.uploadImage(image)
+          .then(url => {
+            alert('uploaded');
+            this.setState({
+              photoSource: url,
+              videoSource: null,
+              audioSource: null,
+            });
+          })
+          .catch(error => console.log(error));
       }
     });
   }
@@ -241,9 +241,9 @@ export default class CreateSOSScreen extends Component {
           alignItems: 'center',
         }}>
         <View style={styles.viewCase}>
-          <Text style={styles.pickerText}>Trường Hợp</Text>
+          <Text style={styles.pickerText}>Bạn đang cần giúp đỡ?</Text>
           <View style={styles.viewPicker}>
-            <Picker
+            {/* <Picker
               selectedValue={this.state.language}
               style={styles.casePicker}
               onValueChange={(itemValue, itemIndex) =>
@@ -251,7 +251,7 @@ export default class CreateSOSScreen extends Component {
               }>
               <Picker.Item label="Java" value="java" />
               <Picker.Item label="JavaScript" value="js" />
-            </Picker>
+            </Picker> */}
           </View>
         </View>
         <View style={styles.viewMessage}>

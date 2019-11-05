@@ -25,6 +25,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  textHidden: {
+    textAlign: 'center',
+    color: '#696969',
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    marginBottom: 10,
+    marginTop: 10,
+  },
 });
 
 export default class NotificationScreen extends Component {
@@ -101,6 +110,7 @@ export default class NotificationScreen extends Component {
   );
 
   render() {
+    console.log(this.state.case);
     return (
       <View style={{flex: 1, alignItems: 'center'}}>
         <HeaderUI title="Danh Sách Sự Cố Đã Gửi" />
@@ -111,6 +121,8 @@ export default class NotificationScreen extends Component {
             textStyle={{color: '#fff'}}
             size="large"
           />
+        ) : Object.keys(this.state.case).length == 0 ? (
+          <Text style={styles.textHidden}>Bạn chưa có sự có nào</Text>
         ) : (
           <FlatList
             data={this.state.case}
