@@ -137,7 +137,13 @@ export class HomeScreen extends Component {
     const {longitude, latitude, phoneNumber} = this.state;
     if (name === 'bt_sos') {
       this.setState({spinner: true});
-      let responseStatus = await APISendSOS(phoneNumber, longitude, latitude);
+      let responseStatus = await APISendSOS(
+        phoneNumber,
+        ' ',
+        longitude,
+        latitude,
+        MESSAGES.TYPE_CASE.SOS,
+      );
       // console.log(phoneNumber, longitude, latitude);
       if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
         console.log(JSON.stringify(responseStatus));
@@ -171,6 +177,7 @@ export class HomeScreen extends Component {
       this.props.navigation.navigate('CreateSOSScreen', {
         latitude: this.state.latitude,
         longitude: this.state.longitude,
+        phoneNumber: phoneNumber,
       });
     }
   };

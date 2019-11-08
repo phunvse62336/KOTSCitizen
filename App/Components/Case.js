@@ -49,6 +49,8 @@ export class Case extends Component {
         return 'Thất Bại';
       case MESSAGES.CASE.PENDING:
         return 'Chưa xử lý';
+      case MESSAGES.CASE.CANCEL:
+        return 'Đã hủy';
     }
   };
 
@@ -113,16 +115,15 @@ export class Case extends Component {
             <Text style={ApplicationStyles.doneStatusCaseView}>
               {this.renderStatus(item.status)}
             </Text>
+          ) : item.status === MESSAGES.CASE.CANCEL ? (
+            <Text style={ApplicationStyles.cancelStatusCaseView}>
+              {this.renderStatus(item.status)}
+            </Text>
           ) : (
             <Text style={ApplicationStyles.statusCaseView}>
               {this.renderStatus(item.status)}
             </Text>
           )}
-          {/* <TouchableOpacity
-            onPress={this.callByPhone}
-            style={ApplicationStyles.callButtonCaseView}>
-            <FontAwesome name="phone" color="white" size={30} />
-          </TouchableOpacity> */}
         </View>
       </TouchableOpacity>
     );

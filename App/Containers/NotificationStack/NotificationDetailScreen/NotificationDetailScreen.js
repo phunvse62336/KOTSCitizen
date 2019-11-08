@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import MapView, {Marker, Callout, AnimatedRegion} from 'react-native-maps';
@@ -12,8 +13,11 @@ import Geocoder from 'react-native-geocoder';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import {MESSAGES} from '../../../Utils/Constants';
+import {APICancelCase} from '../../../Services/APICancelCase';
 
 import CustomCallout from '../../../Components/CustomCallout';
+import Colors from '../../../Themes/Colors';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './NotificationDetailScreenStyles';
 
@@ -25,6 +29,33 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default class NotificationDetailScreen extends Component {
+  static navigationOptions = ({navigation}) => {
+    const {params} = navigation.state;
+    return {
+      headerTitle: 'Sự cố #321',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
+      headerRight: (
+        <View>
+          {navigation.getParam('item').status === 1 && (
+            <TouchableOpacity
+              onPress={() => params.handleRemove()}
+              style={{paddingRight: 20}}>
+              <Icon name="remove" color="red" size={30} />
+            </TouchableOpacity>
+          )}
+          {navigation.getParam('item').status === 0 && (
+            <TouchableOpacity
+              onPress={() => params.handleRemove()}
+              style={{paddingRight: 20}}>
+              <Icon name="remove" color="red" size={30} />
+            </TouchableOpacity>
+          )}
+        </View>
+      ),
+    };
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -49,6 +80,46 @@ export default class NotificationDetailScreen extends Component {
     longitudeDelta: LONGITUDE_DELTA,
   });
 
+  cancelCase = () => {
+    Alert.alert(
+      'Đóng Sự Cố',
+      'Bạn có chắc sẽ hủy sự cố này!',
+      [
+        {
+          text: 'Hủy',
+          onPress: () => console.log('Ask me later pressed'),
+        },
+        {
+          text: 'Xác Nhận',
+          onPress: () => {
+            this.cancelCaseCall();
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
+  cancelCaseCall = async () => {
+    const {item} = this.state;
+    this.setState({spinner: true});
+    let responseStatus = await APICancelCase(item.id, 5);
+    if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+      this.setState({
+        toast: true,
+        spinner: false,
+      });
+      this.props.navigation.goBack();
+      setTimeout(
+        () =>
+          this.setState({
+            toast: false,
+          }),
+        3000,
+      ); // hide toast after 5s
+    }
+  };
+
   onMapLayout = () => {
     this.setState({isMapReady: true});
   };
@@ -69,6 +140,7 @@ export default class NotificationDetailScreen extends Component {
 
   componentDidMount() {
     // alert(JSON.stringify(this.state.item));
+    this.props.navigation.setParams({handleRemove: this.cancelCase});
     this.getAddressFromPosition();
   }
 
@@ -114,7 +186,7 @@ export default class NotificationDetailScreen extends Component {
               {this.state.item.knightConfirmId === null && (
                 <Text style={styles.buttonText}>Đang cập nhật</Text>
               )}
-              {this.state.item.knightConfirmId !== '' && (
+              {this.state.item.knightConfirmId !== null && (
                 <Text style={styles.buttonText}>
                   {this.state.item.knightConfirmId}
                 </Text>
@@ -127,10 +199,10 @@ export default class NotificationDetailScreen extends Component {
             </View>
             <View>
               <Text style={styles.buttonText}>
-                {this.state.item.knightConfirmId === null && (
+                {this.state.item.knightCloseId === null && (
                   <Text style={styles.buttonText}>Đang cập nhật</Text>
                 )}
-                {this.state.item.knightConfirmId !== '' && (
+                {this.state.item.knightCloseId !== null && (
                   <Text style={styles.buttonText}>
                     {this.state.item.knightCloseId}
                   </Text>
