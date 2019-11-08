@@ -14,6 +14,10 @@ import Colors from '../../../Themes/Colors';
 import Button from '../../../Components/Button';
 import {placeholder} from '@babel/types';
 import AsyncStorage from '@react-native-community/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Toast from 'react-native-root-toast';
+import {APISendFeedback} from '../../../Services/APISendFeedback';
+import {MESSAGES} from '../../../Utils/Constants';
 
 const styles = StyleSheet.create({
   container: {
@@ -126,28 +130,55 @@ class FeedBackScreen extends Component {
       height: 0,
       phoneNumber: '',
       message: '',
+      loading: false,
+      toast: false,
+      spinner: false,
     };
   }
 
-  sendFeedBack = () => {
-    alert(this.state.message + ' , ' + this.state.phoneNumber);
+  sendFeedBack = async () => {
+    const {phoneNumber, message} = this.state;
+    this.setState({spinner: true});
+    let responseStatus = await APISendFeedback(phoneNumber, message);
+    if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+      console.log(JSON.stringify(responseStatus));
+      this.setState({
+        toast: true,
+        spinner: false,
+      });
+      this.props.navigation.goBack();
+      setTimeout(
+        () =>
+          this.setState({
+            toast: false,
+          }),
+        3000,
+      ); // hide toast after 5s
+    }
   };
 
-  async getLoadedItem() {
-    await AsyncStorage.getItem('PHONENUMBER').then(phone => {
-      this.setState({
-        phoneNumber: phone,
-      });
-    });
-  }
-
-  componentDidMount() {
-    this.getLoadedItem();
-  }
+  componentDidMount = async () => {
+    let phone = await AsyncStorage.getItem('PHONENUMBER');
+    this.setState({phoneNumber: phone});
+  };
 
   render() {
     return (
       <View style={styles.container}>
+        <Spinner
+          visible={this.state.spinner}
+          textContent={'Đang Xử Lý'}
+          textStyle={{color: '#fff'}}
+          size="large"
+        />
+        <Toast
+          visible={this.state.toast}
+          position={Toast.positions.CENTER}
+          shadow={false}
+          animation={false}
+          hideOnPress={true}>
+          Gửi Thành Công
+        </Toast>
         <View style={styles.viewMessage}>
           <View style={styles.inputViewContainer}>
             <View style={styles.inputViewLabel}>

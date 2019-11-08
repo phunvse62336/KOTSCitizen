@@ -41,3 +41,5 @@ export const GET_CASE_API = BASE_URL + 'getCase';
 export const LOGIN_API = BASE_URL + 'login';
 
 export const REMOVE_TOKEN_API = BASE_URL + 'removeToken';
+
+export const SEND_FEEDBACK_API = BASE_URL + 'sendFeedback';

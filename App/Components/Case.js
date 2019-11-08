@@ -93,7 +93,7 @@ export class Case extends Component {
           {item.status === MESSAGES.CASE.CREATE ? (
             <Text style={ApplicationStyles.timeCaseView}>
               Đã tạo{' '}
-              {moment(item.crateed_at)
+              {moment(item.created_at)
                 .locale('vi')
                 .fromNow()}
             </Text>
