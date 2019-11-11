@@ -46,3 +46,5 @@ export const REMOVE_TOKEN_API = BASE_URL + 'removeToken';
 export const SEND_FEEDBACK_API = BASE_URL + 'sendFeedback';
 
 export const CANCEL_CASE_API = BASE_URL + 'cancelCase';
+
+export const GET_DANGEROUS_STREET_API = BASE_URL + 'getDS';

@@ -18,6 +18,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-root-toast';
 import io from 'socket.io-client/dist/socket.io';
 import AsyncStorage from '@react-native-community/async-storage';
+import MapViewDirections from 'react-native-maps-directions';
+import {APIGetDangerousStreet} from '../../../Services/APIGetDangerousStreet';
 
 import {APISendSOS} from '../../../Services/APISendSOS';
 import {MESSAGES} from '../../../Utils/Constants';
@@ -30,6 +32,8 @@ const LATITUDE = 10.782546;
 const LONGITUDE = 106.650416;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const GOOGLE_MAPS_APIKEY = 'AIzaSyDRJl0JFqHhM8jQ24VrJnzJE8HarKJ1qF0';
 
 const socketURL = 'http://localhost:4333';
 console.ignoredYellowBox = ['Setting a timer'];
@@ -52,8 +56,12 @@ export class HomeScreen extends Component {
         latitudeDelta: 0,
         longitudeDelta: 0,
       }),
+      highlightCoordinates: [],
+      origin: [],
+      destination: [],
     };
 
+    this.mapView = null;
     // Replace "X" with your PubNub Keys
   }
 
@@ -79,8 +87,37 @@ export class HomeScreen extends Component {
     // this.socket.on('updatelocation', socket => {
     //   console.log('CONNECTED');
     // });
+    this.getDangerousStreet();
     this.watchLocation();
   }
+
+  getDangerousStreet = async () => {
+    const origin = [];
+    const destination = [];
+    let responseStatus = await APIGetDangerousStreet();
+    if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+      console.log(JSON.stringify(responseStatus));
+      this.state.highlightCoordinates = responseStatus.data;
+      this.state.highlightCoordinates.map(marker => {
+        origin.push(marker.origin);
+        destination.push(marker.destination);
+      });
+
+      console.log(JSON.stringify(origin) + ',' + JSON.stringify(destination));
+      this.setState({
+        origin: origin,
+        destination: destination,
+      });
+      this.setState({
+        spinner: false,
+      });
+    } else {
+      this.setState({
+        spinner: false,
+      });
+      alert('Không thể kết nối vui lòng thử lại sau');
+    }
+  };
 
   componentDidUpdate(prevProps, prevState) {}
 
@@ -257,6 +294,15 @@ export class HomeScreen extends Component {
               coordinate={this.state.coordinate}
             />
             {this.renderMarkers(markerCoordinates)}
+            {this.state.origin.map((marker, index) => (
+              <MapViewDirections
+                origin={this.state.origin[index]}
+                destination={this.state.destination[index]}
+                apikey={GOOGLE_MAPS_APIKEY}
+                strokeWidth={3}
+                strokeColor="hotpink"
+              />
+            ))}
           </MapView>
         </View>
         <FloatingAction
