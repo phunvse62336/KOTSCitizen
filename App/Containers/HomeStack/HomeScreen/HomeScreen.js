@@ -11,7 +11,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import MapView, {Marker, AnimatedRegion} from 'react-native-maps';
+import MapView, {Marker, AnimatedRegion, Geojson} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {FloatingAction} from 'react-native-floating-action';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -19,12 +19,17 @@ import Toast from 'react-native-root-toast';
 import io from 'socket.io-client/dist/socket.io';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapViewDirections from 'react-native-maps-directions';
-import {APIGetDangerousStreet} from '../../../Services/APIGetDangerousStreet';
+import {pointToLineDistance} from '@turf/point-to-line-distance';
+import {booleanPointOnLine} from '@turf/boolean-point-on-line';
+import * as turf from '@turf/turf';
 
+import {APIAlertDangerousStreet} from '../../../Services/APIAlertDangerousStreet';
+import {APIGetDangerousStreet} from '../../../Services/APIGetDangerousStreet';
 import {APISendSOS} from '../../../Services/APISendSOS';
 import {MESSAGES} from '../../../Utils/Constants';
 import {Images} from '../../../Themes';
 import styles from './HomeScreenStyles';
+import {geojsonType} from '@turf/turf';
 const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
@@ -35,7 +40,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyDRJl0JFqHhM8jQ24VrJnzJE8HarKJ1qF0';
 
-const socketURL = 'http://localhost:4333';
+const socketURL = 'http://localhost:4333/citizen';
 console.ignoredYellowBox = ['Setting a timer'];
 
 export class HomeScreen extends Component {
@@ -66,11 +71,11 @@ export class HomeScreen extends Component {
   }
 
   async componentDidMount() {
-    AsyncStorage.getItem('PHONENUMBER').then(phone => {
-      this.setState({
-        phoneNumber: phone,
-      });
+    let phone = await AsyncStorage.getItem('PHONENUMBER');
+    this.setState({
+      phoneNumber: phone,
     });
+
     const socket = this.socket;
     if (!socket) {
       return;
@@ -103,11 +108,12 @@ export class HomeScreen extends Component {
         destination.push(marker.destination);
       });
 
-      console.log(JSON.stringify(origin) + ',' + JSON.stringify(destination));
-      this.setState({
+      await this.setState({
         origin: origin,
         destination: destination,
       });
+      console.log(JSON.stringify(origin) + ',' + JSON.stringify(destination));
+
       this.setState({
         spinner: false,
       });
@@ -125,12 +131,51 @@ export class HomeScreen extends Component {
     Geolocation.clearWatch(this.watchID);
   }
 
+  alertDangerousStreet = async () => {
+    const phoneNumber = this.state.phoneNumber;
+    console.log(phoneNumber);
+    let responseStatus = await APIAlertDangerousStreet(phoneNumber);
+  };
+
   watchLocation = () => {
     const {coordinate} = this.state;
+    let arrStatus = false;
 
     this.watchID = Geolocation.watchPosition(
       position => {
         const {latitude, longitude} = position.coords;
+        let arrDistance = [];
+
+        var pt = turf.point([latitude, longitude]);
+
+        this.state.highlightCoordinates.map((marker, index) => {
+          const originLat = this.state.origin[index].latitude;
+          const originLong = this.state.origin[index].longitude;
+          const destinationLat = this.state.destination[index].latitude;
+          const destinationLong = this.state.destination[index].longitude;
+
+          var line = turf.lineString([
+            [originLat, originLong],
+            [destinationLat, destinationLong],
+          ]);
+
+          var distance = turf.pointToLineDistance(pt, line);
+          arrDistance.push(distance);
+        });
+
+        if (
+          arrDistance.filter(x => x < 0.03).length > 0 &&
+          arrStatus === false
+        ) {
+          arrStatus = true;
+          this.alertDangerousStreet();
+        }
+        if (arrDistance.filter(x => x < 0.03).length === 0) {
+          arrStatus = false;
+        }
+
+        // console.log(arrDistance.filter(x => x < 0.03));
+        // console.log(arrStatus);
 
         const newCoordinate = {
           latitude,
@@ -159,6 +204,7 @@ export class HomeScreen extends Component {
         timeout: 20000,
         maximumAge: 1000,
         distanceFilter: 30,
+        interval: 10000,
       },
     );
   };
@@ -220,16 +266,29 @@ export class HomeScreen extends Component {
   };
 
   renderMarkers = markerCoordinates => {
-    return markerCoordinates.map((coord, index) => (
-      <MapView.Marker
-        key={index}
-        image={Images.logoApp}
-        centerOffset={{x: 25, y: 25}}
-        anchor={{x: 0.5, y: 0.5}}
-        coordinate={coord}
-        title={`Truck ${index}`}
-      />
-    ));
+    return markerCoordinates.map((data, index) => {
+      var coord = {
+        latitude: data.value.latitude,
+        longitude: data.value.longitude,
+      };
+      return (
+        <MapView.Marker
+          key={index}
+          centerOffset={{x: 25, y: 25}}
+          anchor={{x: 0.5, y: 0.5}}
+          coordinate={coord}
+          title={`Truck ${index}`}>
+          <Image source={Images.logoApp} style={{width: 20, height: 20}} />
+          <Callout onPress={() => Linking.openURL(`tel:${data.value.user.id}`)}>
+            <View style={{width: 170}}>
+              <Text style={{fontSize: 18}}>Thông tin hiệp sĩ</Text>
+              <Text>Hiệp sĩ: {data.value.user.name}</Text>
+              <Text>Liên hệ: {data.value.user.id}</Text>
+            </View>
+          </Callout>
+        </MapView.Marker>
+      );
+    });
   };
 
   render() {
@@ -299,7 +358,7 @@ export class HomeScreen extends Component {
                 origin={this.state.origin[index]}
                 destination={this.state.destination[index]}
                 apikey={GOOGLE_MAPS_APIKEY}
-                strokeWidth={3}
+                strokeWidth={4}
                 strokeColor="hotpink"
               />
             ))}

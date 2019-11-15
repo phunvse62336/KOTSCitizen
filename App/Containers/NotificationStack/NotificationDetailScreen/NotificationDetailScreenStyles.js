@@ -41,4 +41,10 @@ export default StyleSheet.create({
   viewRow: {
     flexDirection: 'row',
   },
+  avatar: {
+    width: width * 0.5,
+    height: width * 0.5,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
 });

@@ -33,14 +33,13 @@ class FirebaseService {
   // initialize Firebase Backend
   constructor() {
     firebase.initializeApp({
-      apiKey: 'AIzaSyBlEcs2D7d66o1vWRix63Mwh9XPNGYyYx0',
-      authDomain: 'kotscitizen.firebaseapp.com',
-      databaseURL: 'https://kotscitizen.firebaseio.com',
-      projectId: 'kotscitizen',
-      storageBucket: 'kotscitizen.appspot.com',
-      messagingSenderId: '608734798806',
-      appId: '1:608734798806:web:593c4d53b6f2ec378cfa77',
-      measurementId: 'G-MW6SRMYEF2',
+      apiKey: 'AIzaSyBL43OazIvXF1WeTnLaXiYQl0xJag5ALoo',
+      authDomain: 'myfirebase-b1225.firebaseapp.com',
+      databaseURL: 'https://myfirebase-b1225.firebaseio.com',
+      projectId: 'myfirebase-b1225',
+      storageBucket: 'myfirebase-b1225.appspot.com',
+      messagingSenderId: '839306361620',
+      appId: '1:839306361620:web:83e3fb44eba555ff6b2001',
     });
     firebase.auth().onAuthStateChanged(user => {
       if (user) {

@@ -1,34 +1,79 @@
 {
   "project_info": {
-    "project_number": "608734798806",
-    "firebase_url": "https://kotscitizen.firebaseio.com",
-    "project_id": "kotscitizen",
-    "storage_bucket": "kotscitizen.appspot.com"
+    "project_number": "839306361620",
+    "firebase_url": "https://myfirebase-b1225.firebaseio.com",
+    "project_id": "myfirebase-b1225",
+    "storage_bucket": "myfirebase-b1225.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:608734798806:android:5f6ace7f22d1ed048cfa77",
+        "mobilesdk_app_id": "1:839306361620:android:55db91ae9e765ab96b2001",
         "android_client_info": {
-          "package_name": "com.kotscitizen"
+          "package_name": "com.kots"
         }
       },
       "oauth_client": [
         {
-          "client_id": "608734798806-csi3is17nkhusbh37nbl3r11lv0ua79m.apps.googleusercontent.com",
+          "client_id": "839306361620-o8d25ch0c551ol17chg55uvc5ee8rtgs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kots",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "839306361620-4640c3ho6a1j8h4gae6t2mi1v9f3e081.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kots",
+            "certificate_hash": "e480fe66b53f6ff331b1f1445d4b4fc1fe35e9ee"
+          }
+        },
+        {
+          "client_id": "839306361620-p8j8oq551tgj60fbrfu465d4vanbh5r2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCuHW_Hv_qDJasXlM4S-9dKo2aepCfIkyM"
+          "current_key": "AIzaSyDnRxBrc2PdRykv7iOWA2rhmBAXDQB-O5I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "608734798806-csi3is17nkhusbh37nbl3r11lv0ua79m.apps.googleusercontent.com",
+              "client_id": "839306361620-p8j8oq551tgj60fbrfu465d4vanbh5r2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839306361620:android:3be7dee73c5146e86b2001",
+        "android_client_info": {
+          "package_name": "com.kotscitizen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839306361620-p8j8oq551tgj60fbrfu465d4vanbh5r2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnRxBrc2PdRykv7iOWA2rhmBAXDQB-O5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839306361620-p8j8oq551tgj60fbrfu465d4vanbh5r2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
