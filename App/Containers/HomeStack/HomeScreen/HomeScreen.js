@@ -92,7 +92,7 @@ export class HomeScreen extends Component {
     // this.socket.on('updatelocation', socket => {
     //   console.log('CONNECTED');
     // });
-    this.getDangerousStreet();
+
     this.watchLocation();
   }
 
@@ -131,13 +131,14 @@ export class HomeScreen extends Component {
     Geolocation.clearWatch(this.watchID);
   }
 
-  alertDangerousStreet = async () => {
+  alertDangerousStreet = async action => {
     const phoneNumber = this.state.phoneNumber;
     console.log(phoneNumber);
-    let responseStatus = await APIAlertDangerousStreet(phoneNumber);
+    let responseStatus = await APIAlertDangerousStreet(phoneNumber, action);
   };
 
   watchLocation = () => {
+    this.getDangerousStreet();
     const {coordinate} = this.state;
     let arrStatus = false;
 
@@ -158,24 +159,29 @@ export class HomeScreen extends Component {
             [originLat, originLong],
             [destinationLat, destinationLong],
           ]);
+          // var curved = turf.bezierSpline(line);
+          var distance = turf.pointToLineDistance(pt, curved);
 
-          var distance = turf.pointToLineDistance(pt, line);
           arrDistance.push(distance);
         });
 
         if (
-          arrDistance.filter(x => x < 0.03).length > 0 &&
+          arrDistance.filter(x => x < 0.05).length > 0 &&
           arrStatus === false
         ) {
           arrStatus = true;
-          this.alertDangerousStreet();
+          this.alertDangerousStreet(true);
         }
-        if (arrDistance.filter(x => x < 0.03).length === 0) {
+        if (
+          arrDistance.filter(x => x < 0.05).length === 0 &&
+          arrStatus === true
+        ) {
           arrStatus = false;
+          this.alertDangerousStreet(false);
         }
 
-        // console.log(arrDistance.filter(x => x < 0.03));
-        // console.log(arrStatus);
+        console.log(arrDistance.filter(x => x < 0.05));
+        console.log(arrStatus);
 
         const newCoordinate = {
           latitude,

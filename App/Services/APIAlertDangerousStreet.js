@@ -1,11 +1,12 @@
 import {ALERT_DANGEROUS_STREET_API} from '../Utils/Constants';
 import axios from 'axios';
 
-export const APIAlertDangerousStreet = async phoneNumber => {
+export const APIAlertDangerousStreet = async (phoneNumber, action) => {
   try {
     let response = await axios
       .post(ALERT_DANGEROUS_STREET_API, {
         phone: phoneNumber,
+        action: action,
       })
       .then(res => {
         console.log(res);
