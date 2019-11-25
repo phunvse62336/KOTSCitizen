@@ -19,8 +19,10 @@ import Toast from 'react-native-root-toast';
 import io from 'socket.io-client/dist/socket.io';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapViewDirections from 'react-native-maps-directions';
-import {pointToLineDistance} from '@turf/point-to-line-distance';
-import {booleanPointOnLine} from '@turf/boolean-point-on-line';
+// import {pointToLineDistance} from '@turf/point-to-line-distance';
+// import {booleanPointOnLine} from '@turf/boolean-point-on-line';
+import directionalMean from '@turf/directional-mean';
+
 import * as turf from '@turf/turf';
 
 import {APIAlertDangerousStreet} from '../../../Services/APIAlertDangerousStreet';
@@ -159,28 +161,31 @@ export class HomeScreen extends Component {
             [originLat, originLong],
             [destinationLat, destinationLong],
           ]);
+
           // var curved = turf.bezierSpline(line);
-          var distance = turf.pointToLineDistance(pt, curved);
+          // console.log(curved);
+
+          var distance = turf.pointToLineDistance(pt, line);
 
           arrDistance.push(distance);
         });
 
         if (
-          arrDistance.filter(x => x < 0.05).length > 0 &&
+          arrDistance.filter(x => x < 0.1).length > 0 &&
           arrStatus === false
         ) {
           arrStatus = true;
           this.alertDangerousStreet(true);
         }
         if (
-          arrDistance.filter(x => x < 0.05).length === 0 &&
+          arrDistance.filter(x => x < 0.1).length === 0 &&
           arrStatus === true
         ) {
           arrStatus = false;
           this.alertDangerousStreet(false);
         }
 
-        console.log(arrDistance.filter(x => x < 0.05));
+        console.log(arrDistance);
         console.log(arrStatus);
 
         const newCoordinate = {

@@ -414,11 +414,11 @@ export default class CreateSOSScreen extends Component {
             onPress={this.selectPhotoTapped.bind(this)}>
             <Icon name="camera" size={40} color="#ffffff" />
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.mediaTouchable}
             onPress={this.selectVideoTapped.bind(this)}>
             <Icon name="video-camera" size={40} color="#ffffff" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         {this.state.photoSource === null ? null : (
           <Image
@@ -426,7 +426,7 @@ export default class CreateSOSScreen extends Component {
             source={{uri: this.state.photoSource.image}}
           />
         )}
-        {this.state.videoSource && (
+        {/* {this.state.videoSource && (
           <Video
             source={this.state.videoSource} // Can be a URL or a local file.
             ref={ref => {
@@ -436,7 +436,7 @@ export default class CreateSOSScreen extends Component {
             onError={this.videoError} // Callback when video cannot be loaded
             style={styles.backgroundVideo}
           />
-        )}
+        )} */}
         {this.state.audioSource && (
           <TouchableOpacity
             style={{
