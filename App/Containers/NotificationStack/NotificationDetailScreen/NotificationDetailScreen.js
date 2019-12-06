@@ -9,6 +9,7 @@ import {
   Alert,
   Image,
   Linking,
+  FlatList,
 } from 'react-native';
 
 import MapView, {Marker, Callout, AnimatedRegion} from 'react-native-maps';
@@ -43,18 +44,64 @@ export default class NotificationDetailScreen extends Component {
       headerRight: (
         <View>
           {navigation.getParam('item').status === 1 && (
-            <TouchableOpacity
-              onPress={() => params.handleRemove()}
-              style={{paddingRight: 20}}>
-              <Icon name="remove" color="red" size={30} />
-            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={() => params.handleKnightTeam()}
+                style={{paddingRight: 20}}>
+                <Icon name="users" color="#1662BD" size={30} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => params.handleRemove()}
+                style={{paddingRight: 20}}>
+                <Icon name="remove" color="red" size={30} />
+              </TouchableOpacity>
+            </View>
           )}
           {navigation.getParam('item').status === 0 && (
-            <TouchableOpacity
-              onPress={() => params.handleRemove()}
-              style={{paddingRight: 20}}>
-              <Icon name="remove" color="red" size={30} />
-            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={() => params.handleKnightTeam()}
+                style={{paddingRight: 20}}>
+                <Icon name="users" color="#1662BD" size={30} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => params.handleRemove()}
+                style={{paddingRight: 20}}>
+                <Icon name="remove" color="red" size={30} />
+              </TouchableOpacity>
+            </View>
+          )}
+          {navigation.getParam('item').status === 2 && (
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={() => params.handleKnightTeam()}
+                style={{paddingRight: 20}}>
+                <Icon name="users" color="#1662BD" size={30} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => params.handleRating()}
+                style={{paddingRight: 20}}>
+                <Icon name="star" color="#1662BD" size={30} />
+              </TouchableOpacity>
+            </View>
+          )}
+          {navigation.getParam('item').status === 3 && (
+            <View>
+              <TouchableOpacity
+                onPress={() => params.handleKnightTeam()}
+                style={{paddingRight: 20}}>
+                <Icon name="users" color="#1662BD" size={30} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => params.handleRating()}
+                style={{paddingRight: 20}}>
+                <Icon name="star" color="#1662BD" size={30} />
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       ),
@@ -161,16 +208,29 @@ export default class NotificationDetailScreen extends Component {
 
   componentDidMount() {
     // alert(JSON.stringify(this.state.item));
-    this.props.navigation.setParams({handleRemove: this.cancelCase});
+    this.props.navigation.setParams({
+      handleRemove: this.cancelCase,
+      handleRating: this._toggleRating,
+      handleKnightTeam: this._toggleKnight,
+    });
     this.getAddressFromPosition();
   }
 
   _toggleModal = () =>
     this.setState({isModalVisible: !this.state.isModalVisible});
+  _toggleRating = () => {
+    this.props.navigation.navigate('RatingCaseScreen', {
+      caseID: this.state.item.id,
+    });
+  };
+  _toggleKnight = () => {
+    this.props.navigation.navigate('KnightJoinListScreen', {
+      knightList: this.state.item.case_detail,
+    });
+  };
 
   render() {
     const {longitude, latitude} = this.state;
-    console.log(this.state.item.image);
     return (
       <View style={styles.container}>
         <Spinner

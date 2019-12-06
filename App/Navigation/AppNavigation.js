@@ -22,6 +22,8 @@ import UpdateProfileScreen from '../Containers/MenuStack/UpdateProfileScreen/Upd
 import NotificationDetailScreen from '../Containers/NotificationStack/NotificationDetailScreen/NotificationDetailScreen';
 import FeedBackScreen from '../Containers/MenuStack/FeedBackScreen/FeedBackScreen';
 import CitizenDetailScreen from '../Containers/MenuStack/CitizenDetailScreen/CitizenDetailScreen';
+import KnightJoinListScreen from '../Containers/NotificationStack/KnightJoinListScreen/KnightJoinListScreen';
+import RatingCaseScreen from '../Containers/NotificationStack/RatingCaseScreen/RatingCaseScreen';
 
 import styles from './Styles/NavigationStyles';
 import {Colors} from '../Themes';
@@ -112,6 +114,22 @@ const SOSTabStack = createStackNavigator({
     screen: NotificationDetailScreen,
     navigationOptions: {
       headerTitle: 'Chi tiết sự cố',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
+    },
+  },
+  KnightJoinListScreen: {
+    screen: KnightJoinListScreen,
+    navigationOptions: {
+      headerTitle: 'Danh sách hiệp sĩ tham gia',
+      headerTintColor: Colors.appColor,
+      headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
+    },
+  },
+  RatingCaseScreen: {
+    screen: RatingCaseScreen,
+    navigationOptions: {
+      headerTitle: 'Đánh giá sự cố',
       headerTintColor: Colors.appColor,
       headerTitleStyle: {color: Colors.appColor, fontWeight: 'bold'},
     },
