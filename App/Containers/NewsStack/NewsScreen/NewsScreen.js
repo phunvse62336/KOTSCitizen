@@ -17,10 +17,14 @@ import News from '../../../Components/News';
 import {APIGetNews} from '../../../Services/APIGetNews';
 import {MESSAGES} from '../../../Utils/Constants';
 import {Colors} from '../../../Themes';
+// import {styles} from './NewsScreenStyles';
 
 const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  scene: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -180,7 +184,7 @@ export default class NewsScreen extends Component {
           textStyle={{color: '#fff', zIndex: 0}}
           size="large"
         />
-        <HeaderUI title="Tin Tức" />
+        {/* <HeaderUI title="Tin Tức" /> */}
         <ScrollView style={styles.containerScrollView}>
           {/* <View style={styles.viewImage}>
             <ImageBackground

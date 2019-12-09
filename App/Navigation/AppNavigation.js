@@ -24,6 +24,8 @@ import FeedBackScreen from '../Containers/MenuStack/FeedBackScreen/FeedBackScree
 import CitizenDetailScreen from '../Containers/MenuStack/CitizenDetailScreen/CitizenDetailScreen';
 import KnightJoinListScreen from '../Containers/NotificationStack/KnightJoinListScreen/KnightJoinListScreen';
 import RatingCaseScreen from '../Containers/NotificationStack/RatingCaseScreen/RatingCaseScreen';
+import TabsViewScreen from '../Containers/NewsStack/NewsScreen/TabsViewScreen';
+import CrimeScreen from '../Containers/NewsStack/NewsScreen/CrimeScreen';
 
 import styles from './Styles/NavigationStyles';
 import {Colors} from '../Themes';
@@ -87,8 +89,20 @@ const HomeTabStack = createStackNavigator({
 });
 
 const NewsTabStack = createStackNavigator({
+  TabsViewScreen: {
+    screen: TabsViewScreen,
+    navigationOptions: {
+      header: null,
+    },
+  },
   NewsScreen: {
     screen: NewsScreen,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  CrimeScreen: {
+    screen: CrimeScreen,
     navigationOptions: {
       header: null,
     },
