@@ -122,10 +122,18 @@ class CrimeScreen extends Component {
     this.state = {
       crime: [
         {
-          name: 'abc',
+          name: 'Nguyen A',
+          image:
+            'https://sophosnews.files.wordpress.com/2017/11/untitled-design2.jpg?w=780&h=408&crop=1',
+          age: '50',
+          crime: 'cướp túi xách',
         },
         {
-          name: '123',
+          name: 'Pham B',
+          image:
+            'https://jerseyeveningpost.com/resizer/-Wj4WqXBs_H0mEDxUv6O2AxyHKg=/1000x0/filters:quality(100)/arc-anglerfish-arc2-prod-jerseyeveningpost-mna.s3.amazonaws.com/public/UIZLO2WO3JASLBA4XK4TIN3CLE.jpg',
+          age: '44',
+          crime: 'cướp xe',
         },
       ],
     };

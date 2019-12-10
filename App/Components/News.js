@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   newsContainer: {
-    height: height * 0.2,
+    height: height * 0.23,
     marginTop: 10,
     borderBottomWidth: 1,
     borderTopWidth: 1,
@@ -68,8 +68,13 @@ const styles = StyleSheet.create({
     flex: 0.6,
     padding: 5,
   },
+  topTitle: {
+    flex: 0.3,
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   topDescription: {
-    flex: 0.8,
+    flex: 0.5,
     fontSize: 14,
   },
   bottomDescription: {
@@ -103,7 +108,10 @@ export default class News extends Component {
           <Image style={styles.newsImage} source={{uri: item.image}} />
         </View>
         <View style={styles.newsDescription}>
-          <Text style={styles.topDescription} numberOfLines={5}>
+          <Text style={styles.topTitle} numberOfLines={2}>
+            {item.title}
+          </Text>
+          <Text style={styles.topDescription} numberOfLines={4}>
             {item.subContent}
           </Text>
           <View style={styles.bottomDescription}>

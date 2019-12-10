@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Linking,
+  Image,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -68,11 +69,12 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   topDescription: {
-    flex: 0.8,
-    fontSize: 14,
+    flex: 0.5,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   bottomDescription: {
-    flex: 0.2,
+    flex: 0.5,
     flexDirection: 'row',
   },
   textSource: {
@@ -81,6 +83,10 @@ const styles = StyleSheet.create({
   },
   textDate: {
     color: '#696969',
+  },
+  textBottomDescription: {
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 
@@ -95,22 +101,28 @@ class Crime extends Component {
     return (
       <View style={styles.newsContainer}>
         <View style={styles.newsImageContainer}>
-          {/* <Image style={styles.newsImage} source={{uri: item.image}} /> */}
+          <Image style={styles.newsImage} source={{uri: item.image}} />
         </View>
         <View style={styles.newsDescription}>
-          <Text style={styles.topDescription} numberOfLines={5}>
-            {item.name}
-          </Text>
+          <Text style={styles.topDescription}>{item.name}</Text>
           <View style={styles.bottomDescription}>
-            {/* <Text
+            <Text style={styles.textBottomDescription}>Tuổi: </Text>
+            <Text>{item.age}</Text>
+          </View>
+          {/* <View style={styles.bottomDescription}>
+            <Text style={styles.textBottomDescription}>Hành vi: </Text>
+            <Text>{item.crime}</Text>
+          </View> */}
+          {/* <View style={styles.bottomDescription}>
+            <Text
               style={styles.textSource}
               onPress={() => Linking.openURL(item.unitlink)}>
               {item.source}
             </Text>
             <Moment fromNow locale="vi" element={Text} style={styles.textDate}>
               {item.created_at}
-            </Moment> */}
-          </View>
+            </Moment>
+          </View> */}
         </View>
       </View>
     );

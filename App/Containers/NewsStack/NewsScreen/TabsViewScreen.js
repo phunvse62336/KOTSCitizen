@@ -10,9 +10,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const NewsRoute = () => <News style={[styles.scene]} />;
+// const NewsRoute = () => <News style={[styles.scene]} navigation={navigation} />;
 
-const CrimeRoute = () => <Crime style={[styles.scene]} />;
+// const CrimeRoute = () => <Crime style={[styles.scene]} />;
 
 class TabsViewScreen extends Component {
   constructor(props) {
@@ -26,16 +26,26 @@ class TabsViewScreen extends Component {
     };
   }
 
+  renderScene = ({route}) => {
+    const {navigation} = this.props;
+    switch (route.key) {
+      case 'news':
+        return <News style={[styles.scene]} navigation={navigation} />;
+      case 'crime':
+        return <Crime style={[styles.scene]} />;
+      default:
+        return null;
+    }
+  };
+
   render() {
     return (
       <TabView
         navigationState={this.state}
-        renderScene={SceneMap({
-          news: NewsRoute,
-          crime: CrimeRoute,
-        })}
+        renderScene={this.renderScene}
         onIndexChange={index => this.setState({index})}
         initialLayout={{width: Dimensions.get('window').width}}
+        indicatorStyle={{backgroundColor: '#1662BD'}}
       />
     );
   }
