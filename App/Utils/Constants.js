@@ -52,3 +52,5 @@ export const GET_DANGEROUS_STREET_API = BASE_URL + 'getDS';
 export const ALERT_DANGEROUS_STREET_API = BASE_URL + 'alertDS';
 
 export const RATING_CASE_API = BASE_URL + 'rateCase';
+
+export const GET_CRIME_API = BASE_URL + 'getCriminal';

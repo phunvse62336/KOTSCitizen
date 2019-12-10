@@ -13,7 +13,10 @@ import HeaderUI from '../../../Components/HeaderUI';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-root-toast';
 import {Colors} from '../../../Themes';
+
 import Crime from '../../../Components/Crime';
+import {APIGetCrime} from '../../../Services/APIGetCrime';
+import {MESSAGES} from '../../../Utils/Constants';
 
 const {width, height} = Dimensions.get('window');
 
@@ -114,29 +117,32 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
+  Top1Description: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    color: Colors.appColor,
+    marginTop: 10,
+  },
 });
 
 class CrimeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      crime: [
-        {
-          name: 'Nguyen A',
-          image:
-            'https://sophosnews.files.wordpress.com/2017/11/untitled-design2.jpg?w=780&h=408&crop=1',
-          age: '50',
-          crime: 'cướp túi xách',
-        },
-        {
-          name: 'Pham B',
-          image:
-            'https://jerseyeveningpost.com/resizer/-Wj4WqXBs_H0mEDxUv6O2AxyHKg=/1000x0/filters:quality(100)/arc-anglerfish-arc2-prod-jerseyeveningpost-mna.s3.amazonaws.com/public/UIZLO2WO3JASLBA4XK4TIN3CLE.jpg',
-          age: '44',
-          crime: 'cướp xe',
-        },
-      ],
+      crime: [],
     };
+  }
+
+  async componentDidMount() {
+    this.setState({spinner: true});
+    let responseStatus = await APIGetCrime();
+    if (responseStatus.result === MESSAGES.CODE.SUCCESS_CODE) {
+      console.log(JSON.stringify(responseStatus));
+      this.state.crime = responseStatus.data;
+    } else {
+      alert('Không thể kết nối vui lòng thử lại sau');
+    }
   }
 
   _renderItem = ({item, index}) => (
@@ -146,13 +152,10 @@ class CrimeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner
-          visible={this.state.spinner}
-          textContent={'Đang Xử Lý'}
-          textStyle={{color: '#fff', zIndex: 0}}
-          size="large"
-        />
         <View style={styles.viewFlat}>
+          <Text style={styles.Top1Description}>
+            Danh sách tội phạm từ các vụ án
+          </Text>
           <FlatList
             data={this.state.crime}
             extraData={this.state}

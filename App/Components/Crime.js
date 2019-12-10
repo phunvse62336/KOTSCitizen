@@ -49,11 +49,14 @@ const styles = StyleSheet.create({
   newsContainer: {
     height: height * 0.2,
     marginTop: 10,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    borderBottomColor: '#000000',
-    borderTopColor: '#000000',
+    width: width * 0.9,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: Colors.appColor,
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    alignSelf: 'center',
   },
   newsImageContainer: {
     flex: 0.4,
@@ -70,12 +73,13 @@ const styles = StyleSheet.create({
   },
   topDescription: {
     flex: 0.5,
-    fontSize: 18,
-    fontWeight: 'bold',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   bottomDescription: {
     flex: 0.5,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   textSource: {
     color: '#1e90ff',
@@ -85,7 +89,11 @@ const styles = StyleSheet.create({
     color: '#696969',
   },
   textBottomDescription: {
-    fontSize: 14,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  textTopDescription: {
+    fontSize: 20,
     fontWeight: 'bold',
   },
 });
@@ -104,10 +112,12 @@ class Crime extends Component {
           <Image style={styles.newsImage} source={{uri: item.image}} />
         </View>
         <View style={styles.newsDescription}>
-          <Text style={styles.topDescription}>{item.name}</Text>
+          <View style={styles.topDescription}>
+            <Text style={styles.textTopDescription}>{item.name}</Text>
+          </View>
           <View style={styles.bottomDescription}>
             <Text style={styles.textBottomDescription}>Tuổi: </Text>
-            <Text>{item.age}</Text>
+            <Text style={{fontSize: 16}}>{item.age}</Text>
           </View>
           {/* <View style={styles.bottomDescription}>
             <Text style={styles.textBottomDescription}>Hành vi: </Text>
